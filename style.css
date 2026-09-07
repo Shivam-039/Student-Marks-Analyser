@@ -129,7 +129,7 @@ nav a.active::after {
    ========================= */
 
 section {
-    min-height: 100vh;
+    min-height: auto;
     padding: 60px 40px;
 }
 
@@ -1819,3 +1819,223 @@ button:hover {
     }
 
 } 
+/* ================================
+   MOBILE RESPONSIVE DESIGN
+================================ */
+
+@media (max-width: 768px) {
+
+    body {
+        padding-top: 65px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        height: 65px;
+        padding: 0 18px;
+    }
+
+    .logo {
+        font-size: 16px;
+    }
+
+    nav {
+        gap: 14px;
+    }
+
+    nav a {
+        font-size: 9px;
+    }
+
+    nav a.active::after {
+        bottom: -7px;
+        height: 2px;
+    }
+
+    .menu {
+        width: 27px;
+    }
+
+    .menu span {
+        width: 27px;
+        height: 2px;
+        margin: 7px 0;
+    }
+
+
+    /* ALL SECTIONS */
+    section {
+        min-height: auto;
+        padding: 45px 16px;
+    }
+
+
+    /* ADD STUDENT */
+    .student-container {
+        width: 100%;
+    }
+
+    .student-card {
+        width: 100%;
+        padding: 24px;
+        margin: 25px auto;
+    }
+
+
+    /* RESULTS */
+    #results {
+        min-height: auto;
+        padding-top: 45px;
+        padding-bottom: 45px;
+    }
+
+    .results-container {
+        width: 100%;
+    }
+
+    #resultCard {
+        width: 100%;
+    }
+
+    .result-card {
+        width: 100%;
+    }
+
+
+    /* RESULT SUMMARY CARDS */
+    .result-summary {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+
+    /* ANALYSIS */
+    #analysis {
+        min-height: auto;
+        padding-top: 45px;
+        padding-bottom: 50px;
+    }
+
+    .analysis-container {
+        width: 100%;
+    }
+
+    .analysis-main {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .subject-analysis,
+    .chart-section {
+        width: 100%;
+    }
+
+
+    /* ANALYSIS TABLE */
+    .analysis-table {
+        width: 100%;
+        font-size: 11px;
+    }
+
+    .analysis-table th,
+    .analysis-table td {
+        padding: 9px 5px;
+    }
+
+
+    /* PIE CHART */
+    .pie-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+
+    /* SUMMARY CARDS */
+    .analysis-summary {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .summary-card {
+        width: 100%;
+    }
+
+
+    /* PERFORMANCE ANALYSIS */
+    .performance-content {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .performance-circle {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .performance-text {
+        width: 100%;
+    }
+
+
+    /* ABOUT */
+    .about-container {
+        width: 100%;
+    }
+
+    .about-cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .about-card {
+        width: 100%;
+    }
+}
+
+
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+
+    nav {
+        gap: 10px;
+    }
+
+    nav a {
+        font-size: 8px;
+    }
+
+    .navbar {
+        padding: 0 14px;
+    }
+
+    .logo {
+        font-size: 15px;
+    }
+
+    .menu {
+        width: 24px;
+    }
+
+    .menu span {
+        width: 24px;
+    }
+
+    section {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .student-card {
+        padding: 20px;
+    }
+
+    .result-summary {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+}
