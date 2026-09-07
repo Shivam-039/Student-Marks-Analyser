@@ -1,0 +1,1821 @@
+/* =========================
+   RESET
+   ========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   PAGE
+   ========================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #DED9E2;
+    margin: 0;
+    padding-top: 90px;
+}
+
+
+/* =========================
+   TOP NAVIGATION
+   ========================= */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 90px;
+
+    background-color: #10072B;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+
+/* =========================
+   LOGO
+   ========================= */
+
+.logo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+nav a {
+    position: relative;
+
+    color: white;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #F7F4EA;
+}
+
+
+/* Active Link */
+
+nav a.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: -10px;
+
+    width: 100%;
+    height: 3px;
+
+    background-color: #E78AD9;
+}
+
+
+/* =========================
+   MENU ICON
+   ========================= */
+
+.menu {
+    width: 38px;
+    cursor: pointer;
+}
+
+.menu span {
+    display: block;
+
+    width: 38px;
+    height: 2px;
+
+    background-color: white;
+
+    margin: 10px 0;
+}
+
+
+/* =========================
+   SECTIONS
+   ========================= */
+
+section {
+    min-height: 100vh;
+    padding: 60px 40px;
+}
+
+
+/* =========================
+   CONTAINER / FORM
+   ========================= */
+
+.container {
+    width: 400px;
+
+    margin: 50px auto;
+
+    padding: 30px;
+
+    background-color: #C0B9DD;
+
+    border-radius: 10px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   HEADINGS
+   ========================= */
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+
+/* =========================
+   PARAGRAPH
+   ========================= */
+
+p {
+    text-align: center;
+
+    color: gray;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   LABELS
+   ========================= */
+
+label {
+    display: block;
+
+    margin-top: 15px;
+    margin-bottom: 5px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   INPUT
+   ========================= */
+
+input {
+    width: 100%;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background-color: #F7F4EA;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   INPUT FOCUS
+   ========================= */
+
+input:focus {
+    outline: none;
+
+    border: 2px solid #10072B;
+}
+
+
+/* =========================
+   BUTTON
+   ========================= */
+
+button {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-top: 25px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    background-color: #10072B;
+
+    color: white;
+}
+
+
+/* Button Hover */
+
+button:hover {
+    background-color: #2A1B4D;
+}
+/* ==============================
+   RESULT CARD
+   ============================== */
+
+#resultCard {
+    margin-top: 20px;
+}
+
+.result-card {
+    background-color: #F7F4EA;
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid #10072B;
+    box-shadow: 0 6px 20px rgba(16, 7, 43, 0.18);
+}
+
+.result-card h3 {
+    text-align: center;
+    color: #10072B;
+    font-size: 22px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #E78AD9;
+}
+
+.result-card p {
+    text-align: left;
+    color: #10072B;
+    margin: 12px 0;
+    padding: 10px 12px;
+    background-color: #DED9E2;
+    border-radius: 6px;
+}
+
+.result-card strong {
+    display: inline-block;
+    width: 120px;
+    color: #10072B;
+}
+
+.result-card p:last-child {
+    background-color: #C0B9DD;
+    font-size: 17px;
+    font-weight: bold;
+}
+/* ==============================
+   ANALYSIS SECTION
+   ============================== */
+
+#analysisContent {
+    margin-top: 20px;
+}
+
+.analysis-card {
+    background-color: #F7F4EA;
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: 2px solid #10072B;
+    box-shadow: 0 5px 15px rgba(16, 7, 43, 0.15);
+}
+
+.analysis-card h3 {
+    color: #10072B;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.analysis-table th,
+.analysis-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #C0B9DD;
+}
+
+.analysis-table th {
+    background-color: #10072B;
+    color: white;
+}
+
+.analysis-table td {
+    color: #10072B;
+}
+
+.analysis-highlight {
+    padding: 12px;
+    margin: 10px 0;
+    background-color: #DED9E2;
+    border-radius: 6px;
+    color: #10072B;
+    font-weight: bold;
+}
+
+.performance {
+    padding: 15px;
+    margin-top: 15px;
+    background-color: #C0B9DD;
+    border-radius: 8px;
+    color: #10072B;
+    line-height: 1.6;
+}
+/* =================================
+   ANALYSIS DASHBOARD
+   ================================= */
+
+.analysis-container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+.analysis-container > h2 {
+    color: #10072B;
+    margin-bottom: 25px;
+}
+
+
+/* =================================
+   MAIN ANALYSIS BOX
+   ================================= */
+
+.analysis-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+
+    background-color: #F7F4EA;
+    padding: 25px;
+
+    border: 2px solid #C0B9DD;
+    border-radius: 12px;
+
+    box-shadow: 0 5px 20px rgba(16, 7, 43, 0.12);
+}
+
+.subject-analysis h3,
+.chart-section h3 {
+    color: #10072B;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+
+/* =================================
+   TABLE
+   ================================= */
+
+.analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.analysis-table th {
+    background-color: #10072B;
+    color: white;
+    padding: 12px;
+    text-align: center;
+}
+
+.analysis-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #C0B9DD;
+    color: #10072B;
+}
+
+.analysis-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =================================
+   PIE CHART
+   ================================= */
+
+.pie-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+
+.pie-chart {
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background: conic-gradient(
+        #4CAF50 0deg 72deg,
+        #2196F3 72deg 144deg,
+        #FFA726 144deg 216deg,
+        #EF5350 216deg 288deg,
+        #C62828 288deg 360deg
+    );
+
+    border: 5px solid white;
+
+    box-shadow: 0 5px 15px rgba(16, 7, 43, 0.15);
+}
+
+
+/* =================================
+   LEGEND
+   ================================= */
+
+.chart-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    font-size: 13px;
+    color: #10072B;
+}
+
+.chart-legend div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.legend.excellent {
+    background-color: #4CAF50;
+}
+
+.legend.very-good {
+    background-color: #2196F3;
+}
+
+.legend.good {
+    background-color: #FFA726;
+}
+
+.legend.improvement {
+    background-color: #EF5350;
+}
+
+.legend.poor {
+    background-color: #C62828;
+}
+
+
+/* =================================
+   SUMMARY CARDS
+   ================================= */
+
+.analysis-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+
+    margin-top: 25px;
+}
+
+.summary-card {
+    background-color: #F7F4EA;
+
+    padding: 22px;
+
+    border-radius: 10px;
+
+    border: 2px solid #C0B9DD;
+
+    box-shadow: 0 4px 15px rgba(16, 7, 43, 0.10);
+}
+
+.summary-card h3 {
+    margin-bottom: 12px;
+    color: #10072B;
+}
+
+.summary-card p {
+    margin: 0;
+    text-align: left;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: #10072B;
+}
+
+.highest-card {
+    border-left: 5px solid #4CAF50;
+}
+
+.lowest-card {
+    border-left: 5px solid #EF5350;
+}
+
+.average-card {
+    border-left: 5px solid #FFA726;
+}
+
+
+/* =================================
+   PERFORMANCE ANALYSIS
+   ================================= */
+
+.performance-analysis {
+    margin-top: 25px;
+
+    background-color: #F7F4EA;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    border: 2px solid #C0B9DD;
+
+    box-shadow: 0 5px 20px rgba(16, 7, 43, 0.12);
+}
+
+.performance-analysis > h3 {
+    color: #10072B;
+    margin-bottom: 25px;
+}
+
+
+.performance-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 35px;
+
+    align-items: center;
+}
+
+
+/* =================================
+   AVERAGE CIRCLE
+   ================================= */
+
+.performance-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#averageCircle {
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #F7F4EA 58%,
+            transparent 59%
+        ),
+        conic-gradient(
+            #5E35B1 0deg,
+            #5E35B1 0deg,
+            #DED9E2 0deg
+        );
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+#circleAverage {
+    font-size: 32px;
+    color: #10072B;
+}
+
+#averageCircle span {
+    margin-top: 8px;
+    color: #10072B;
+}
+
+
+/* =================================
+   PERFORMANCE TEXT
+   ================================= */
+
+.performance-text h3 {
+    text-align: left;
+    color: #10072B;
+    margin-bottom: 12px;
+}
+
+.performance-text > p {
+    text-align: left;
+    color: #10072B;
+    line-height: 1.6;
+}
+
+
+.insight-box {
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border: 1px solid #C0B9DD;
+    border-radius: 8px;
+
+    background-color: #DED9E2;
+}
+
+.insight-box p {
+    text-align: left;
+    color: #10072B;
+
+    margin: 10px 0;
+}
+
+
+/* =================================
+   MOBILE
+   ================================= */
+
+@media (max-width: 800px) {
+
+    .analysis-main {
+        grid-template-columns: 1fr;
+    }
+
+    .analysis-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .performance-content {
+        grid-template-columns: 1fr;
+    }
+
+    .pie-wrapper {
+        flex-direction: column;
+    }
+
+}
+/* =================================
+   PROFESSIONAL RESULTS SECTION
+   ================================= */
+
+.results-container {
+    width: 90%;
+    max-width: 1050px;
+    margin: 40px auto;
+}
+
+
+/* Heading */
+
+.results-container h2 {
+    text-align: center;
+    color: #10072B;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.results-subtitle {
+    text-align: center;
+    color: #6f6a78;
+    margin-bottom: 35px;
+}
+
+
+/* =================================
+   RESULT CARD
+   ================================= */
+
+.result-card {
+    position: relative;
+
+    background: #F7F4EA;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(192, 185, 221, 0.8);
+
+    box-shadow:
+        0 10px 30px rgba(16, 7, 43, 0.10),
+        0 2px 8px rgba(16, 7, 43, 0.06);
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =================================
+   RESULT TITLE
+   ================================= */
+
+.result-card h3 {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    color: #10072B;
+
+    font-size: 24px;
+
+    margin: 0 0 10px;
+}
+
+
+/* Small decorative line */
+
+.result-card h3::after {
+    content: "";
+
+    display: block;
+
+    width: 55px;
+    height: 3px;
+
+    margin: 12px auto 0;
+
+    background: #E78AD9;
+
+    border-radius: 10px;
+}
+
+
+/* =================================
+   RESULT BOXES
+   ================================= */
+
+.result-card p {
+    margin: 0;
+
+    padding: 24px 15px;
+
+    min-height: 105px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    background: white;
+
+    border: 1px solid #e2deea;
+
+    border-radius: 12px;
+
+    color: #10072B;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+
+/* Hover */
+
+.result-card p:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 18px rgba(16, 7, 43, 0.10);
+}
+
+
+/* =================================
+   LABEL
+   ================================= */
+
+.result-card p strong {
+    display: block;
+
+    margin-bottom: 12px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    color: #777080;
+}
+
+
+/* =================================
+   INDIVIDUAL ACCENTS
+   ================================= */
+
+.result-card p:nth-of-type(1) {
+    border-top: 4px solid #5E35B1;
+}
+
+.result-card p:nth-of-type(2) {
+    border-top: 4px solid #E78AD9;
+}
+
+.result-card p:nth-of-type(3) {
+    border-top: 4px solid #8E7CC3;
+}
+
+.result-card p:nth-of-type(4) {
+    border-top: 4px solid #4CAF50;
+}
+
+
+/* =================================
+   RESULT STATUS
+   ================================= */
+
+.result-card p:nth-of-type(4) {
+    color: #247333;
+}
+
+
+/* =================================
+   PLACEHOLDER
+   ================================= */
+
+.result-placeholder {
+    width: 100%;
+
+    padding: 45px 25px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    background: #F7F4EA;
+
+    border: 2px dashed #C0B9DD;
+
+    border-radius: 15px;
+
+    color: #777080;
+
+    font-size: 16px;
+}
+
+
+/* =================================
+   TABLET
+   ================================= */
+
+@media (max-width: 800px) {
+
+    .result-card {
+        grid-template-columns: repeat(2, 1fr);
+
+        padding: 25px;
+    }
+
+}
+
+
+/* =================================
+   MOBILE
+   ================================= */
+
+@media (max-width: 500px) {
+
+    .results-container {
+        width: 92%;
+    }
+
+    .result-card {
+        grid-template-columns: 1fr;
+
+        padding: 20px;
+    }
+
+    .result-card h3 {
+        font-size: 21px;
+    }
+
+}
+/* =================================
+   PROFESSIONAL ADD STUDENT SECTION
+   ================================= */
+
+.student-container {
+    width: 90%;
+    max-width: 850px;
+    margin: 30px auto;
+}
+
+/* HEADER */
+
+.student-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 7px 14px;
+    background-color: #10072B;
+    color: white;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+}
+
+.student-header h2 {
+    color: #10072B;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.student-header p {
+    color: #6f6a78;
+    margin: 0;
+}
+
+/* MAIN CARD */
+
+.student-card {
+    background-color: #F7F4EA;
+    padding: 35px;
+    border-radius: 18px;
+    border: 1px solid #C0B9DD;
+
+    box-shadow:
+        0 12px 35px rgba(16, 7, 43, 0.10),
+        0 3px 10px rgba(16, 7, 43, 0.06);
+}
+
+/* STEP */
+
+.form-step {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.step-number {
+    min-width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #10072B;
+    color: white;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.step-content {
+    width: 100%;
+}
+
+.step-content h3 {
+    color: #10072B;
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.step-content p {
+    text-align: left;
+    color: #777080;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+/* FORM */
+
+#subjectForm label {
+    color: #10072B;
+    margin-top: 0;
+}
+
+#subjectForm input {
+    margin-top: 4px;
+    background-color: white;
+    border: 1px solid #C0B9DD;
+}
+
+#subjectForm input:focus {
+    border: 2px solid #10072B;
+}
+
+/* CONTINUE BUTTON */
+
+#subjectForm button {
+    margin-top: 20px;
+    background-color: #10072B;
+    transition: 0.2s ease;
+}
+
+#subjectForm button span {
+    margin-left: 8px;
+    font-size: 18px;
+}
+
+#subjectForm button:hover {
+    background-color: #2A1B4D;
+    transform: translateY(-2px);
+}
+
+/* DYNAMIC SUBJECT SECTION */
+
+#subjectSection {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #C0B9DD;
+}
+
+#subjectSection .subject-input {
+    margin-top: 18px;
+}
+
+#subjectSection label {
+    color: #10072B;
+}
+
+#subjectSection input {
+    background-color: white;
+    border: 1px solid #C0B9DD;
+}
+
+#subjectSection input:focus {
+    border: 2px solid #10072B;
+}
+
+/* DYNAMIC BUTTONS */
+
+#subjectSection button {
+    margin-top: 25px;
+    background-color: #10072B;
+    transition: 0.2s ease;
+}
+
+#subjectSection button:hover {
+    background-color: #2A1B4D;
+    transform: translateY(-2px);
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .student-container {
+        width: 92%;
+    }
+
+    .student-card {
+        padding: 25px;
+    }
+
+    .form-step {
+        gap: 15px;
+    }
+
+    .step-number {
+        min-width: 45px;
+        height: 45px;
+        font-size: 11px;
+    }
+
+    .student-header h2 {
+        font-size: 27px;
+    }
+}
+/* =================================
+   CARD TRANSITION
+   ================================= */
+
+.student-card {
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+}
+
+.student-card.card-exit {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.student-card.card-enter {
+    animation: cardEnter 0.45s ease forwards;
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+/* =========================================
+   HOME PAGE
+========================================= */
+
+#home {
+    min-height: 100vh;
+    padding: 70px 40px 100px;
+    background-color: #DED9E2;
+}
+
+.home-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.home-hero {
+    text-align: center;
+    padding: 50px 20px 70px;
+}
+
+.home-tag {
+    display: inline-block;
+    padding: 8px 18px;
+    border: 1px solid #10072B;
+    border-radius: 30px;
+    color: #10072B;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+.home-hero h1 {
+    margin: 0;
+    color: #10072B;
+    font-size: 48px;
+    line-height: 1.15;
+}
+
+.home-subtitle {
+    max-width: 600px;
+    margin: 18px auto 30px;
+    color: #666;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   HOME BUTTONS
+========================================= */
+
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-width: 170px;
+    padding: 13px 22px;
+
+    border-radius: 6px;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    transition:
+        transform 0.25s ease,
+        background-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.primary-btn {
+    background-color: #10072B;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #2A1B4D;
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background-color: #F7F4EA;
+    color: #10072B;
+    border: 1px solid #10072B;
+}
+
+.secondary-btn:hover {
+    background-color: #10072B;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   FEATURE CARDS
+========================================= */
+
+.home-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 90px;
+}
+
+.feature-card {
+    background-color: #F7F4EA;
+    border: 1px solid #C0B9DD;
+    border-radius: 10px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.feature-number {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #10072B;
+    color: white;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    margin-bottom: 22px;
+}
+
+.feature-card h3 {
+    color: #10072B;
+    font-size: 19px;
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+
+    margin: 0;
+    text-align: left;
+}
+
+
+/* =========================================
+   HOW IT WORKS
+========================================= */
+
+.home-process {
+    background-color: #C0B9DD;
+    border-radius: 12px;
+
+    padding: 50px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.process-heading {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.process-heading .home-tag {
+    margin-bottom: 15px;
+}
+
+.process-heading h2 {
+    color: #10072B;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.process-heading p {
+    color: #666;
+    margin: 0;
+}
+
+
+/* =========================================
+   PROCESS STEPS
+========================================= */
+
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+
+    background-color: #F7F4EA;
+    border-radius: 8px;
+
+    padding: 25px;
+}
+
+.process-number {
+    min-width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #10072B;
+    color: white;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.process-step h3 {
+    color: #10072B;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.process-step p {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+
+    margin: 0;
+    text-align: left;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .home-hero h1 {
+        font-size: 40px;
+    }
+
+    .home-features,
+    .process-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .home-process {
+        padding: 35px 25px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    #home {
+        padding: 45px 20px 70px;
+    }
+
+    .home-hero {
+        padding: 30px 10px 50px;
+    }
+
+    .home-hero h1 {
+        font-size: 32px;
+    }
+
+    .home-subtitle {
+        font-size: 15px;
+    }
+
+    .home-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .home-btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .feature-card {
+        padding: 25px;
+    }
+
+    .home-process {
+        padding: 30px 20px;
+    }
+
+}
+/* =========================================
+   ABOUT SECTION
+========================================= */
+
+#about {
+    min-height: 100vh;
+    padding: 80px 40px 100px;
+    background-color: #DED9E2;
+}
+
+.about-container {
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   ABOUT HEADER
+========================================= */
+
+.about-header {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.about-tag {
+    display: inline-block;
+
+    padding: 7px 16px;
+
+    border: 1px solid #10072B;
+    border-radius: 30px;
+
+    color: #10072B;
+
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+
+    margin-bottom: 16px;
+}
+
+.about-header h2 {
+    color: #10072B;
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+.about-header > p {
+    max-width: 650px;
+    margin: 0 auto;
+
+    color: #666;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   ABOUT CONTENT
+========================================= */
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.about-card {
+    background-color: #F7F4EA;
+
+    border: 1px solid #C0B9DD;
+    border-radius: 10px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================
+   ABOUT ICON
+========================================= */
+
+.about-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #10072B;
+    color: white;
+
+    border-radius: 8px;
+
+    font-size: 20px;
+
+    margin-bottom: 22px;
+}
+
+.about-card h3 {
+    color: #10072B;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.about-card > p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.7;
+
+    text-align: left;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================================
+   ABOUT FEATURES
+========================================= */
+
+.about-feature {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid #DED9E2;
+}
+
+.about-feature:last-child {
+    border-bottom: none;
+}
+
+.about-feature span {
+    min-width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #C0B9DD;
+    color: #10072B;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.about-feature p {
+    margin: 0;
+
+    color: #555;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    text-align: left;
+}
+
+
+/* =========================================
+   TECHNOLOGIES
+========================================= */
+
+.technology-section {
+    margin-top: 65px;
+
+    padding: 40px;
+
+    background-color: #C0B9DD;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.technology-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.technology-heading .about-tag {
+    margin-bottom: 12px;
+}
+
+.technology-heading h3 {
+    color: #10072B;
+    font-size: 25px;
+}
+
+.technology-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.technology-card {
+    background-color: #F7F4EA;
+
+    border-radius: 8px;
+
+    padding: 20px 10px;
+
+    text-align: center;
+
+    transition:
+        transform 0.25s ease;
+}
+
+.technology-card:hover {
+    transform: translateY(-4px);
+}
+
+.technology-card strong {
+    display: block;
+
+    color: #10072B;
+
+    font-size: 15px;
+
+    margin-bottom: 6px;
+}
+
+.technology-card span {
+    color: #777;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   ABOUT BOTTOM
+========================================= */
+
+.about-bottom {
+    text-align: center;
+
+    margin-top: 45px;
+}
+
+.about-bottom p {
+    color: #777;
+
+    font-size: 13px;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 850px) {
+
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+
+    .technology-list {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    #about {
+        padding: 60px 20px 80px;
+    }
+
+    .about-header h2 {
+        font-size: 30px;
+    }
+
+    .about-header > p {
+        font-size: 14px;
+    }
+
+    .about-card {
+        padding: 25px;
+    }
+
+    .technology-section {
+        padding: 25px 20px;
+    }
+
+    .technology-list {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+} 

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Student Marks Analyser</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">MARKS</div>
+
+    <nav>
+        <a href="#home" >HOME</a>
+        <a href="#student">ADD STUDENT</a>
+        <a href="#results">RESULTS</a>
+        <a href="#analysis">ANALYSIS</a>
+        <a href="#about">ABOUT</a>
+    </nav>
+
+    <div class="menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</header>
+
+
+<!-- HOME -->
+
+<section id="home">
+
+    <div class="home-container">
+
+        <!-- HERO -->
+        <div class="home-hero">
+
+            <span class="home-tag">
+                STUDENT PERFORMANCE TOOL
+            </span>
+
+            <h1>
+                Student Marks Analyser
+            </h1>
+
+            <p class="home-subtitle">
+                Analyse marks, understand performance,
+                and get clear results with ease.
+            </p>
+
+            <div class="home-buttons">
+
+                <a href="#student" class="home-btn primary-btn">
+                    ADD STUDENT
+                    <span>→</span>
+                </a>
+
+                <a href="#results" class="home-btn secondary-btn">
+                    VIEW RESULTS
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- FEATURES -->
+        <div class="home-features">
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    01
+                </div>
+
+                <h3>
+                    Marks Calculation
+                </h3>
+
+                <p>
+                    Calculate total marks, average,
+                    grade and result automatically.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    02
+                </div>
+
+                <h3>
+                    Result Summary
+                </h3>
+
+                <p>
+                    Get a simple and clear summary
+                    of the student's overall result.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    03
+                </div>
+
+                <h3>
+                    Subject Analysis
+                </h3>
+
+                <p>
+                    Understand subject-wise performance
+                    and identify strengths and weaknesses.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOW IT WORKS -->
+        <div class="home-process">
+
+            <div class="process-heading">
+
+                <span class="home-tag">
+                    SIMPLE PROCESS
+                </span>
+
+                <h2>
+                    How It Works
+                </h2>
+
+                <p>
+                    Analyse student performance in three simple steps.
+                </p>
+
+            </div>
+
+
+            <div class="process-steps">
+
+                <div class="process-step">
+
+                    <div class="process-number">
+                        01
+                    </div>
+
+                    <div>
+                        <h3>
+                            Enter Subjects
+                        </h3>
+
+                        <p>
+                            Choose the number of subjects
+                            and enter their names.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="process-step">
+
+                    <div class="process-number">
+                        02
+                    </div>
+
+                    <div>
+                        <h3>
+                            Enter Marks
+                        </h3>
+
+                        <p>
+                            Enter the marks obtained
+                            in each subject.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="process-step">
+
+                    <div class="process-number">
+                        03
+                    </div>
+
+                    <div>
+                        <h3>
+                            Get Analysis
+                        </h3>
+
+                        <p>
+                            View the result, grade,
+                            average and performance insights.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ADD STUDENT -->
+
+<section id="student">
+
+    <div class="student-container">
+
+        <div class="student-header">
+            <span class="section-tag">STUDENT DETAILS</span>
+
+            <h2>Add Student</h2>
+
+            <p>
+                Enter the subjects and marks to generate a complete result analysis.
+            </p>
+        </div>
+
+        <div class="student-card">
+
+            <div class="form-step">
+                <div class="step-number">01</div>
+
+                <div class="step-content">
+
+                    <h3>Number of Subjects</h3>
+
+                    <p>
+                        First, tell us how many subjects you want to analyse.
+                    </p>
+
+                    <form id="subjectForm">
+
+                        <label for="subjectCount">
+                            Number of Subjects
+                        </label>
+
+                        <input
+                            type="number"
+                            id="subjectCount"
+                            min="1"
+                            placeholder="e.g. 5"
+                            required
+                        >
+
+                        <button type="submit">
+                            Continue
+                            <span>→</span>
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+            <div id="subjectSection"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RESULTS -->
+
+<section id="results">
+
+    <div class="results-container">
+
+        <h2>Results</h2>
+
+        <p class="results-subtitle">
+            Student Result Summary
+        </p>
+
+        <div id="resultCard">
+
+            <div class="result-placeholder">
+                Calculate the result to see the summary.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ANALYSIS -->
+
+<section id="analysis">
+
+    <div class="analysis-container">
+
+        <h2>Analysis</h2>
+
+        <!-- TOP ANALYSIS BOX -->
+
+        <div class="analysis-main">
+
+            <!-- SUBJECT TABLE -->
+
+            <div class="subject-analysis">
+
+                <h3>📋 Subject-wise Performance</h3>
+
+                <table class="analysis-table">
+
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Marks</th>
+                            <th>Performance</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="analysisTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PIE CHART -->
+
+            <div class="chart-section">
+
+                <h3>🥧 Performance Distribution</h3>
+
+                <div class="pie-wrapper">
+
+                    <div id="performancePie"
+                         class="pie-chart">
+                    </div>
+
+
+                    <div class="chart-legend">
+
+                        <div>
+                            <span class="legend excellent"></span>
+                            Excellent (90-100)
+                        </div>
+
+                        <div>
+                            <span class="legend very-good"></span>
+                            Very Good (75-89)
+                        </div>
+
+                        <div>
+                            <span class="legend good"></span>
+                            Good (60-74)
+                        </div>
+
+                        <div>
+                            <span class="legend improvement"></span>
+                            Needs Improvement (40-59)
+                        </div>
+
+                        <div>
+                            <span class="legend poor"></span>
+                            Poor (&lt;40)
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY CARDS -->
+
+        <div class="analysis-summary">
+
+            <div class="summary-card highest-card">
+
+                <h3>🏆 Highest Score</h3>
+
+                <p id="highestScore">-</p>
+
+            </div>
+
+
+            <div class="summary-card lowest-card">
+
+                <h3>📉 Lowest Score</h3>
+
+                <p id="lowestScore">-</p>
+
+            </div>
+
+
+            <div class="summary-card average-card">
+
+                <h3>⭐ Average Marks</h3>
+
+                <p id="averageScore">-</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PERFORMANCE ANALYSIS -->
+
+        <div class="performance-analysis">
+
+            <h3>📈 Performance Analysis</h3>
+
+            <div class="performance-content">
+
+                <div class="performance-circle">
+
+                    <div id="averageCircle">
+
+                        <strong id="circleAverage">
+                            0%
+                        </strong>
+
+                        <span>
+                            Overall Performance
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="performance-text">
+
+                    <h3 id="performanceTitle">
+                        Performance Analysis
+                    </h3>
+
+                    <p id="performanceMessage">
+                        Calculate your result to see your performance analysis.
+                    </p>
+
+
+                    <div class="insight-box">
+
+                        <p id="insight1">
+                            ✓ Your analysis will appear here.
+                        </p>
+
+                        <p id="insight2">
+                            ★ Your subject performance will be analyzed.
+                        </p>
+
+                        <p id="insight3">
+                            ↗ Keep working consistently to improve.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="about">
+
+    <div class="about-container">
+
+        <!-- ABOUT HEADER -->
+        <div class="about-header">
+
+            <span class="about-tag">
+                ABOUT THE PROJECT
+            </span>
+
+            <h2>
+                Student Marks Analyser
+            </h2>
+
+            <p>
+                A simple student performance analysis system
+                designed to make marks calculation and result
+                analysis easier.
+            </p>
+
+        </div>
+
+
+        <!-- ABOUT CONTENT -->
+        <div class="about-content">
+
+            <!-- PROJECT DESCRIPTION -->
+            <div class="about-card about-description">
+
+                <div class="about-icon">
+                    ✦
+                </div>
+
+                <h3>
+                    What is this project?
+                </h3>
+
+                <p>
+                    Student Marks Analyser is a project that
+                    calculates student marks and provides a
+                    clear performance summary.
+                </p>
+
+                <p>
+                    Users can enter different subjects and
+                    their marks to calculate the total,
+                    average, grade and pass or fail result.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURES -->
+            <div class="about-card">
+
+                <div class="about-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    What does it do?
+                </h3>
+
+                <div class="about-feature">
+
+                    <span>01</span>
+
+                    <p>
+                        Calculates total and average marks.
+                    </p>
+
+                </div>
+
+                <div class="about-feature">
+
+                    <span>02</span>
+
+                    <p>
+                        Automatically determines the grade.
+                    </p>
+
+                </div>
+
+                <div class="about-feature">
+
+                    <span>03</span>
+
+                    <p>
+                        Shows pass or fail status.
+                    </p>
+
+                </div>
+
+                <div class="about-feature">
+
+                    <span>04</span>
+
+                    <p>
+                        Provides subject-wise performance analysis.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TECHNOLOGIES
+        <div class="technology-section">
+
+            <div class="technology-heading">
+
+                <span class="about-tag">
+                    TECHNOLOGIES
+                </span>
+
+                <h3>
+                    Built With
+                </h3>
+
+            </div>
+
+
+            <div class="technology-list">
+
+             
+
+                
+
+                <div class="technology-card">
+                    <strong>HTML</strong>
+                    <span>Structure</span>
+                </div>
+
+                <div class="technology-card">
+                    <strong>CSS</strong>
+                    <span>Design</span>
+                </div>
+
+                <div class="technology-card">
+                    <strong>JavaScript</strong>
+                    <span>Interaction</span>
+                </div>
+
+            </div>
+
+        </div> -->
+
+
+        <!-- FOOTER MESSAGE -->
+        <div class="about-bottom">
+
+            <p>
+                Designed to make student performance
+                analysis simple, clear and easy to understand.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+<script src="script.js"></script>
+</body>
+</html>
