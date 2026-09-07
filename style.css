@@ -2038,4 +2038,408 @@ button:hover {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
     }
+}/* =========================================
+   FINAL MOBILE RESPONSIVE FIX
+========================================= */
+
+@media (max-width: 600px) {
+
+    /* PAGE */
+    body {
+        padding-top: 70px;
+        overflow-x: hidden;
+    }
+
+    section {
+        min-height: auto;
+        padding: 45px 15px;
+    }
+
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    .navbar {
+        height: 70px;
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+
+    nav {
+        gap: 9px;
+        margin-left: 10px;
+    }
+
+    nav a {
+        font-size: 8px;
+        white-space: nowrap;
+    }
+
+    nav a.active::after {
+        bottom: -7px;
+        height: 2px;
+    }
+
+    .menu {
+        width: 24px;
+        flex-shrink: 0;
+        margin-left: 8px;
+    }
+
+    .menu span {
+        width: 24px;
+        height: 2px;
+        margin: 6px 0;
+    }
+
+
+    /* =========================
+       HOME
+    ========================= */
+
+    #home {
+        min-height: auto;
+        padding: 45px 15px 60px;
+    }
+
+    .home-hero {
+        padding: 25px 5px 45px;
+    }
+
+    .home-hero h1 {
+        font-size: 31px;
+        line-height: 1.2;
+    }
+
+    .home-subtitle {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .home-features {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 50px;
+    }
+
+    .feature-card {
+        padding: 24px;
+    }
+
+    .home-process {
+        padding: 25px 18px;
+    }
+
+    .process-steps {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* =========================
+       ADD STUDENT
+    ========================= */
+
+    #student {
+        padding: 45px 15px;
+    }
+
+    .student-container {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .student-header {
+        margin-bottom: 25px;
+    }
+
+    .student-header h2 {
+        font-size: 27px;
+    }
+
+    .student-header p {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .student-card {
+        width: 100%;
+        padding: 22px 18px;
+        margin: 20px auto;
+        border-radius: 14px;
+    }
+
+    .form-step {
+        gap: 13px;
+    }
+
+    .step-number {
+        min-width: 43px;
+        width: 43px;
+        height: 43px;
+        font-size: 10px;
+        flex-shrink: 0;
+    }
+
+    .step-content h3 {
+        font-size: 18px;
+    }
+
+    .step-content p {
+        font-size: 13px;
+    }
+
+    #subjectSection {
+        margin-top: 25px;
+        padding-top: 25px;
+    }
+
+
+    /* =========================
+       RESULTS
+    ========================= */
+
+    #results {
+        min-height: auto;
+        padding: 40px 15px 45px;
+    }
+
+    .results-container {
+        width: 100%;
+        margin: 15px auto;
+    }
+
+    .results-container h2 {
+        font-size: 27px;
+    }
+
+    .results-subtitle {
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    #resultCard {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .result-card {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 13px;
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    .result-card h3 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .result-card p {
+        min-height: 85px;
+        padding: 18px 12px;
+        font-size: 19px;
+    }
+
+    .result-card p strong {
+        font-size: 10px;
+        margin-bottom: 8px;
+    }
+
+
+    /* =========================
+       ANALYSIS
+    ========================= */
+
+    #analysis {
+        min-height: auto;
+        padding: 45px 15px 60px;
+    }
+
+    .analysis-container {
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    .analysis-container > h2 {
+        font-size: 27px;
+        margin-bottom: 20px;
+    }
+
+    .analysis-main {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    .subject-analysis,
+    .chart-section {
+        width: 100%;
+    }
+
+    .subject-analysis h3,
+    .chart-section h3 {
+        font-size: 16px;
+    }
+
+
+    /* TABLE */
+
+    .analysis-table {
+        font-size: 11px;
+    }
+
+    .analysis-table th,
+    .analysis-table td {
+        padding: 9px 5px;
+    }
+
+
+    /* PIE CHART */
+
+    .pie-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .pie-chart {
+        width: 180px;
+        height: 180px;
+    }
+
+    .chart-legend {
+        font-size: 11px;
+        gap: 9px;
+    }
+
+
+    /* =========================
+       ANALYSIS SUMMARY
+    ========================= */
+
+    .analysis-summary {
+        grid-template-columns: 1fr;
+        gap: 13px;
+        margin-top: 18px;
+    }
+
+    .summary-card {
+        width: 100%;
+        padding: 18px;
+    }
+
+    .summary-card h3 {
+        font-size: 16px;
+    }
+
+    .summary-card p {
+        font-size: 19px;
+    }
+
+
+    /* =========================
+       PERFORMANCE
+    ========================= */
+
+    .performance-analysis {
+        margin-top: 18px;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .performance-analysis > h3 {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .performance-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .performance-circle {
+        width: 100%;
+    }
+
+    #averageCircle {
+        width: 180px;
+        height: 180px;
+    }
+
+    #circleAverage {
+        font-size: 27px;
+    }
+
+    .performance-text {
+        width: 100%;
+    }
+
+    .performance-text h3 {
+        font-size: 17px;
+    }
+
+    .performance-text > p {
+        font-size: 13px;
+    }
+
+    .insight-box {
+        padding: 12px;
+    }
+
+    .insight-box p {
+        font-size: 12px;
+    }
+
+
+    /* =========================
+       ABOUT
+    ========================= */
+
+    #about {
+        min-height: auto;
+        padding: 50px 15px 70px;
+    }
+
+    .about-container {
+        width: 100%;
+    }
+
+    .about-header {
+        margin-bottom: 35px;
+    }
+
+    .about-header h2 {
+        font-size: 29px;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .about-card {
+        width: 100%;
+        padding: 25px;
+    }
+
+    .technology-section {
+        margin-top: 40px;
+        padding: 25px 18px;
+    }
+
+    .technology-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .technology-card {
+        padding: 22px 10px;
+    }
 }
