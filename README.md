@@ -1,6 +1,6 @@
 # Student Marks Analyser
 
-A Simple python project thst calculate student marks, average, grade and pass/fail status.
+A Simple  project that calculate student marks, average, grade and pass/fail status.
 
 ## Features
 
@@ -10,7 +10,7 @@ A Simple python project thst calculate student marks, average, grade and pass/fa
 - Calculates Average marks
 - Assign a grade
 - Determine pass/fail status
-- Saves student results to a csv file
+
 # Student Marks Analyser
 
 A simple and user-friendly web application that helps students calculate and analyse their academic performance.
