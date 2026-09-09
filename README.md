@@ -39,21 +39,6 @@ Student-Marks-Analyser/
 └── README.md         # Project documentation
 ```
 
----
-
-## 🚀 Getting Started
-
-### Run it locally
-
-1. Clone the repository
-   ```bash
-   git clone https://github.com/shivam-039/Student-Marks-Analyser.git
-   ```
-2. Open the project folder
-   ```bash
-   cd Student-Marks-Analyser
-   ```
-3. Open `index.html` directly in your browser — no installation or server required.
 
 ### Or just use it online
 
