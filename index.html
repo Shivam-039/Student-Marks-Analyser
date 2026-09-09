@@ -16,15 +16,13 @@
         <a href="#home" >HOME</a>
         <a href="#student">ADD STUDENT</a>
         <a href="#results">RESULTS</a>
+        <a href="#dashboard">DASHBOARD</a>
+         <a href="#history">HISTORY</a>
         <a href="#analysis">ANALYSIS</a>
         <a href="#about">ABOUT</a>
     </nav>
 
-    <div class="menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+   
 </header>
 
 
@@ -66,60 +64,37 @@
         </div>
 
 
-        <!-- FEATURES -->
+        <!-- CORE FEATURES -->
+        <div class="home-section-intro">
+            <span class="home-tag">WHAT YOU GET</span>
+            <h2>Everything you need to understand results</h2>
+            <p>Simple tools for calculating marks, analysing performance and keeping exam records.</p>
+        </div>
+
         <div class="home-features">
 
             <div class="feature-card">
-
-                <div class="feature-number">
-                    01
-                </div>
-
-                <h3>
-                    Marks Calculation
-                </h3>
-
-                <p>
-                    Calculate total marks, average,
-                    grade and result automatically.
-                </p>
-
+                <div class="feature-number">01</div>
+                <h3>Calculate Results</h3>
+                <p>Get total marks, average, grade and pass or fail automatically.</p>
             </div>
 
-
             <div class="feature-card">
-
-                <div class="feature-number">
-                    02
-                </div>
-
-                <h3>
-                    Result Summary
-                </h3>
-
-                <p>
-                    Get a simple and clear summary
-                    of the student's overall result.
-                </p>
-
+                <div class="feature-number">02</div>
+                <h3>Smart Analysis</h3>
+                <p>See strongest subjects, focus areas and practical improvement tips.</p>
             </div>
 
+            <div class="feature-card">
+                <div class="feature-number">03</div>
+                <h3>Track Progress</h3>
+                <p>Compare saved exams to understand how performance changes over time.</p>
+            </div>
 
             <div class="feature-card">
-
-                <div class="feature-number">
-                    03
-                </div>
-
-                <h3>
-                    Subject Analysis
-                </h3>
-
-                <p>
-                    Understand subject-wise performance
-                    and identify strengths and weaknesses.
-                </p>
-
+                <div class="feature-number">04</div>
+                <h3>Student Dashboard</h3>
+                <p>View the latest result, progress, strengths and exam history together.</p>
             </div>
 
         </div>
@@ -232,6 +207,41 @@
 
         <div class="student-card">
 
+            <!-- PHASE 1: STUDENT INFORMATION -->
+            <div class="student-info-section" id="studentInfoSection">
+                <div class="student-info-heading">
+                    <span class="info-badge">01</span>
+                    <div>
+                        <h3>Student Information</h3>
+                        <p>Add basic details to personalize the result.</p>
+                    </div>
+                </div>
+
+                <div class="student-info-grid">
+                    <div class="info-field">
+                        <label for="studentName">Student Name</label>
+                        <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" autocomplete="name">
+                    </div>
+                    <div class="info-field">
+                        <label for="studentClass">Class</label>
+                        <input type="text" id="studentClass" placeholder="e.g. 10th">
+                    </div>
+                    <div class="info-field">
+                        <label for="rollNumber">Roll Number</label>
+                        <input type="text" id="rollNumber" placeholder="e.g. 23" required>
+                    </div>
+                    <div class="info-field">
+                        <label for="examName">Exam <span>(optional)</span></label>
+                        <input type="text" id="examName" placeholder="e.g. Mid Term">
+                    </div>
+                </div>
+
+                <div class="student-info-note">
+                    <span>💡</span>
+                    <span>These details stay on this page and are used to personalize your result.</span>
+                </div>
+            </div>
+
             <div class="form-step">
                 <div class="step-number">01</div>
 
@@ -296,6 +306,66 @@
 
         </div>
 
+        <div class="history-preview-note">
+            <span>💾</span>
+            <span>Save a result to keep it available after refreshing the page.</span>
+        </div>
+
+        <div class="report-card-screen-note">
+            <span>📄</span>
+            <div>
+                <strong>Report Card</strong>
+                <p>Print your result or choose <b>Save as PDF</b> in the print dialog.</p>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PHASE 6: STUDENT DASHBOARD -->
+<section id="dashboard">
+    <div class="dashboard-container">
+        <div class="dashboard-heading">
+            <span class="section-mini-tag">STUDENT DASHBOARD</span>
+            <h2>Your Performance Dashboard</h2>
+            <p>See your latest result, progress, strongest subjects and saved exams in one place.</p>
+        </div>
+
+        <div id="studentDashboard" class="student-dashboard">
+            <div class="dashboard-empty">
+                <span>👤</span>
+                <strong>Enter your student details to open your dashboard</strong>
+                <p>Your dashboard will only show results matching your Name + Roll Number + Class.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PHASE 3: EXAM HISTORY -->
+<section id="history">
+
+    <div class="history-container">
+
+        <div class="history-heading">
+            <span class="section-mini-tag">SAVED RESULTS</span>
+            <h2>Exam History</h2>
+            <p>Enter your Name, Roll Number and Class to view only your saved results on this device.</p>
+        </div>
+
+        <div id="historyList" class="history-list">
+            <div class="history-empty">
+                <span>📚</span>
+                <strong>No saved results yet</strong>
+                <p>Your saved exam results will appear here.</p>
+            </div>
+        </div>
+
+        <button type="button" id="clearHistoryButton" class="history-clear-button" hidden>
+            Clear All History
+        </button>
+
     </div>
 
 </section>
@@ -325,6 +395,7 @@
                         <tr>
                             <th>Subject</th>
                             <th>Marks</th>
+                            <th>Score</th>
                             <th>Performance</th>
                         </tr>
                     </thead>
@@ -477,6 +548,56 @@
 
         </div>
 
+        <!-- PHASE 2: SMART PERFORMANCE INSIGHTS -->
+        <div class="advanced-analysis" id="advancedAnalysis">
+            <div class="advanced-heading">
+                <span class="section-mini-tag">SMART INSIGHTS</span>
+                <h3>Understand Your Performance</h3>
+                <p>See where you are doing well and where a little more practice can help.</p>
+            </div>
+
+            <div class="quick-stats">
+                <div class="quick-stat"><span>🏆</span><strong id="smartBestSubject">-</strong><small>Strongest subject</small></div>
+                <div class="quick-stat"><span>🎯</span><strong id="smartFocusSubject">-</strong><small>Focus subject</small></div>
+                <div class="quick-stat"><span>📚</span><strong id="smartStrongCount">-</strong><small>Subjects at 75+</small></div>
+                <div class="quick-stat"><span>📈</span><strong id="smartAverage">-</strong><small>Overall average</small></div>
+            </div>
+
+            <!-- PHASE 5: EXAM-TO-EXAM PROGRESS TRACKING -->
+            <div class="progress-tracker-card" id="progressTracker">
+                <div class="advanced-heading">
+                    <span class="section-mini-tag">PROGRESS TRACKER</span>
+                    <h3>Track Your Improvement</h3>
+                    <p id="progressTrackerIntro">Save your exams to compare your latest performance with your previous result.</p>
+                </div>
+                <div class="progress-summary" id="progressSummary">
+                    <div class="progress-summary-item"><span>📈</span><strong id="progressOverallChange">-</strong><small>Overall change</small></div>
+                    <div class="progress-summary-item"><span>⬆️</span><strong id="progressImprovedCount">-</strong><small>Subjects improved</small></div>
+                    <div class="progress-summary-item"><span>🏆</span><strong id="progressBestGain">-</strong><small>Best improvement</small></div>
+                </div>
+                <div class="progress-comparison" id="progressComparison"></div>
+            </div>
+
+            <div class="advanced-chart-card">
+                <div class="advanced-heading">
+                    <h3>Subject Score Map</h3>
+                    <p>Quickly spot your strong and weak areas.</p>
+                </div>
+                <div class="subject-bars" id="subjectBars"></div>
+            </div>
+
+            <div class="study-tips-card">
+                <div class="advanced-heading">
+                    <span class="section-mini-tag">ACTION PLAN</span>
+                    <h3>What to Work On Next</h3>
+                    <p id="actionPlanIntro">Calculate your result to get personalized suggestions.</p>
+                </div>
+                <div class="tips-list" id="tipsList">
+                    <div class="tip-item"><span>💡</span><div><strong>Personalized tips</strong><p>Your suggestions will appear here after you calculate the result.</p></div></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </section>
@@ -507,87 +628,67 @@
 
 
         <!-- ABOUT CONTENT -->
-        <div class="about-content">
+        <div class="about-content about-main-grid">
 
-            <!-- PROJECT DESCRIPTION -->
             <div class="about-card about-description">
-
-                <div class="about-icon">
-                    ✦
-                </div>
-
-                <h3>
-                    What is this project?
-                </h3>
-
+                <div class="about-icon">✦</div>
+                <span class="about-card-label">THE IDEA</span>
+                <h3>What is Student Marks Analyser?</h3>
                 <p>
-                    Student Marks Analyser is a project that
-                    calculates student marks and provides a
-                    clear performance summary.
+                    Student Marks Analyser is a simple web app for
+                    turning raw subject marks into a clear, useful
+                    performance report.
                 </p>
-
                 <p>
-                    Users can enter different subjects and
-                    their marks to calculate the total,
-                    average, grade and pass or fail result.
+                    It combines calculation, subject analysis, saved
+                    exam history, progress tracking and report cards
+                    in one student-friendly workflow.
                 </p>
-
             </div>
 
-
-            <!-- FEATURES -->
             <div class="about-card">
+                <div class="about-icon">✓</div>
+                <span class="about-card-label">KEY FEATURES</span>
+                <h3>Everything in one place</h3>
 
-                <div class="about-icon">
-                    ✓
-                </div>
-
-                <h3>
-                    What does it do?
-                </h3>
-
-                <div class="about-feature">
-
-                    <span>01</span>
-
-                    <p>
-                        Calculates total and average marks.
-                    </p>
-
-                </div>
-
-                <div class="about-feature">
-
-                    <span>02</span>
-
-                    <p>
-                        Automatically determines the grade.
-                    </p>
-
-                </div>
-
-                <div class="about-feature">
-
-                    <span>03</span>
-
-                    <p>
-                        Shows pass or fail status.
-                    </p>
-
-                </div>
-
-                <div class="about-feature">
-
-                    <span>04</span>
-
-                    <p>
-                        Provides subject-wise performance analysis.
-                    </p>
-
-                </div>
-
+                <div class="about-feature"><span>01</span><p>Automatic total, average and grade calculation.</p></div>
+                <div class="about-feature"><span>02</span><p>Subject-wise strengths and focus areas.</p></div>
+                <div class="about-feature"><span>03</span><p>Student-linked exam history and progress.</p></div>
+                <div class="about-feature"><span>04</span><p>Printable report card for each result.</p></div>
             </div>
 
+            <div class="about-card about-use-card">
+                <div class="about-icon">◎</div>
+                <span class="about-card-label">HOW IT HELPS</span>
+                <h3>From marks to understanding</h3>
+                <div class="about-mini-list">
+                    <div><strong>01</strong><p>Enter student and subject details.</p></div>
+                    <div><strong>02</strong><p>Calculate the result instantly.</p></div>
+                    <div><strong>03</strong><p>Understand performance with visual insights.</p></div>
+                    <div><strong>04</strong><p>Save results and track future exams.</p></div>
+                </div>
+            </div>
+
+            <div class="about-card about-data-card">
+                <div class="about-icon">🔒</div>
+                <span class="about-card-label">DATA NOTE</span>
+                <h3>Simple browser-based storage</h3>
+                <p>
+                    Saved results are kept in the browser's local storage
+                    so the app can remember exam history on the same
+                    browser and device.
+                </p>
+                <div class="data-note-pill">No account required • Static web app</div>
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT VALUES -->
+        <div class="about-values">
+            <div><span>01</span><strong>Simple</strong><p>Easy to understand at every step.</p></div>
+            <div><span>02</span><strong>Useful</strong><p>More than marks: insights and progress.</p></div>
+            <div><span>03</span><strong>Student-friendly</strong><p>Clean layout for quick everyday use.</p></div>
         </div>
 
 
