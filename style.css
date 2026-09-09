@@ -55,16 +55,92 @@ body {
    ========================= */
 
 .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-badge {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #5E35B1, #E78AD9);
+
     color: white;
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 19px;
+    font-weight: 800;
+
+    box-shadow: 0 4px 12px rgba(94, 53, 177, 0.4);
+}
+
+.logo-spark {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #4CAF50;
+
+    border: 2px solid #10072B;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.logo-text small {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #C0B9DD;
+    margin-top: 2px;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .logo-badge {
+        width: 32px;
+        height: 32px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    .logo-text {
+        font-size: 15px;
+    }
+
+    .logo-text small {
+        display: none;
+    }
 }
 
 
 /* =========================
    NAVIGATION
    ========================= */
-
+.navbar {
+    padding: 0 50px 0 30px; /* more room on the right */
+}
 nav {
     display: flex;
     align-items: center;
