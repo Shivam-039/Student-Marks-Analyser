@@ -18894,3 +18894,293 @@ body:not(.dark-mode) #home .process-steps::before {
         max-width: 100%;
     }
 }
+/* =========================================
+   DARK MODE — MOVING BACKGROUND ORBS
+   ========================================= */
+
+body.dark-mode #home {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Large moving circle */
+body.dark-mode #home::before {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    left: -120px;
+    top: 90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 35%,
+            rgba(139, 92, 246, 0.32),
+            rgba(88, 45, 180, 0.16) 45%,
+            transparent 72%
+        );
+
+    filter: blur(2px);
+
+    animation: homeOrbMove 14s ease-in-out infinite alternate;
+
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Small floating orb */
+body.dark-mode #home::after {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    right: -60px;
+    top: 120px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(167, 139, 250, 0.20),
+            rgba(99, 102, 241, 0.08) 50%,
+            transparent 72%
+        );
+
+    filter: blur(3px);
+
+    animation: homeOrbMove2 11s ease-in-out infinite alternate;
+
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* =========================================
+   ORB ANIMATIONS
+   ========================================= */
+
+@keyframes homeOrbMove {
+
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate3d(70px, 35px, 0) scale(1.05);
+    }
+
+    50% {
+        transform: translate3d(130px, -20px, 0) scale(0.96);
+    }
+
+    75% {
+        transform: translate3d(80px, 80px, 0) scale(1.08);
+    }
+
+    100% {
+        transform: translate3d(180px, 35px, 0) scale(1);
+    }
+}
+
+
+@keyframes homeOrbMove2 {
+
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    30% {
+        transform: translate3d(-60px, 40px, 0) scale(1.1);
+    }
+
+    60% {
+        transform: translate3d(-110px, -30px, 0) scale(0.92);
+    }
+
+    100% {
+        transform: translate3d(-40px, 100px, 0) scale(1.05);
+    }
+}
+
+
+/* Keep Home content above the moving background */
+body.dark-mode #home > * {
+    position: relative;
+    z-index: 1;
+}
+/* =========================================
+   DARK MODE — MOVING BACKGROUND ORBS
+   ========================================= */
+
+/* =========================================
+   RIGHT MOVING BALL
+   RIGHT → LEFT → RIGHT
+   ========================================= */
+
+body.dark-mode #home {
+    position: relative !important;
+    overflow: hidden !important;
+    isolation: isolate;
+}
+
+body.dark-mode #home .right-moving-ball {
+    position: absolute !important;
+
+    width: 260px;
+    height: 260px;
+
+    /* RIGHT SIDE SE START */
+    right: -100px;
+    top: 120px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle at 35% 35%,
+        rgba(139, 92, 246, 0.38),
+        rgba(88, 45, 180, 0.18) 45%,
+        transparent 72%
+    );
+
+    filter: blur(2px);
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    animation: rightMovingBall 14s ease-in-out infinite alternate;
+}
+
+
+/* =========================================
+   MOVEMENT
+   ========================================= */
+
+@keyframes rightMovingBall {
+
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate3d(-100px, 40px, 0) scale(1.05);
+    }
+
+    50% {
+        transform: translate3d(-220px, -20px, 0) scale(0.96);
+    }
+
+    75% {
+        transform: translate3d(-340px, 70px, 0) scale(1.08);
+    }
+
+    100% {
+        transform: translate3d(-480px, 20px, 0) scale(1);
+    }
+}
+
+
+/* Content ball ke upar rahe */
+body.dark-mode #home > *:not(.right-moving-ball) {
+    position: relative;
+    z-index: 2;
+}
+/* =========================================
+   BALL 1 — LARGE, SLOW & WIDE
+   ========================================= */
+
+body.dark-mode #home::before {
+    animation: homeOrbMove 18s ease-in-out infinite alternate;
+}
+
+@keyframes homeOrbMove {
+
+    0% {
+        transform: translate3d(120px, 20px, 0) scale(1);
+    }
+
+    25% {
+        transform: translate3d(20px, 70px, 0) scale(1.04);
+    }
+
+    50% {
+        transform: translate3d(-140px, 10px, 0) scale(0.96);
+    }
+
+    75% {
+        transform: translate3d(-260px, -70px, 0) scale(1.08);
+    }
+
+    100% {
+        transform: translate3d(-380px, 30px, 0) scale(1);
+    }
+}
+
+
+/* =========================================
+   BALL 2 — SMALL, FASTER & VERTICAL
+   ========================================= */
+
+body.dark-mode #home::after {
+    animation: homeOrbMove2 11s ease-in-out infinite alternate;
+}
+
+@keyframes homeOrbMove2 {
+
+    0% {
+        transform: translate3d(20px, -40px, 0) scale(0.9);
+    }
+
+    20% {
+        transform: translate3d(-70px, 50px, 0) scale(1.05);
+    }
+
+    45% {
+        transform: translate3d(-180px, -10px, 0) scale(0.95);
+    }
+
+    70% {
+        transform: translate3d(-90px, 110px, 0) scale(1.08);
+    }
+
+    100% {
+        transform: translate3d(-280px, 40px, 0) scale(1);
+    }
+}
+
+
+/* =========================================
+   BALL 3 — RIGHT MOVING BALL
+   DIFFERENT PATH
+   ========================================= */
+
+body.dark-mode #home .right-moving-ball {
+    animation: rightMovingBall 15s cubic-bezier(.45,0,.55,1) infinite alternate;
+}
+
+@keyframes rightMovingBall {
+
+    0% {
+        transform: translate3d(30px, 80px, 0) scale(0.92);
+    }
+
+    22% {
+        transform: translate3d(-60px, 10px, 0) scale(1);
+    }
+
+    48% {
+        transform: translate3d(-190px, -80px, 0) scale(1.08);
+    }
+
+    72% {
+        transform: translate3d(-310px, 20px, 0) scale(0.96);
+    }
+
+    100% {
+        transform: translate3d(-430px, 100px, 0) scale(1.02);
+    }
+}
