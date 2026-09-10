@@ -1573,3 +1573,61 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 });
+// ==============================
+// DARK / LIGHT MODE
+// ==============================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const themeToggle = document.getElementById("themeToggle");
+
+    if (!themeToggle) return;
+
+    const themeIcon = themeToggle.querySelector(".theme-icon");
+    const themeLabel = themeToggle.querySelector(".theme-label");
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem("marksAnalyserTheme");
+
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+    } else {
+        document.body.classList.remove("dark-mode");
+    }
+
+    function updateThemeButton() {
+
+        const isDark =
+            document.body.classList.contains("dark-mode");
+
+        if (themeIcon) {
+            themeIcon.textContent = isDark ? "☀️" : "🌙";
+        }
+
+        if (themeLabel) {
+            themeLabel.textContent = isDark ? "Light" : "Dark";
+        }
+
+        themeToggle.setAttribute(
+            "aria-label",
+            isDark
+                ? "Switch to light mode"
+                : "Switch to dark mode"
+        );
+    }
+
+    themeToggle.addEventListener("click", function () {
+
+        const isDark =
+            document.body.classList.toggle("dark-mode");
+
+        localStorage.setItem(
+            "marksAnalyserTheme",
+            isDark ? "dark" : "light"
+        );
+
+        updateThemeButton();
+    });
+
+    updateThemeButton();
+});
