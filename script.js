@@ -27,416 +27,1727 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getHistory() {
         try {
-            const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+            const saved = JSON.parse(
+                localStorage.getItem(HISTORY_KEY) || "[]"
+            );
+
             return Array.isArray(saved) ? saved : [];
+
         } catch (error) {
             return [];
         }
     }
 
+
     function saveHistory(history) {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        localStorage.setItem(
+            HISTORY_KEY,
+            JSON.stringify(history)
+        );
     }
 
+
     function escapeHtml(value) {
-        return String(value ?? "").replace(/[&<>'"]/g, function (char) {
-            const entities = {
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                "'": "&#39;",
-                '"': "&quot;"
-            };
-            return entities[char];
-        });
+        return String(value ?? "").replace(
+            /[&<>'"]/g,
+            function (char) {
+
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    "'": "&#39;",
+                    '"': "&quot;"
+                };
+
+                return entities[char];
+            }
+        );
     }
+
 
     // ==============================
     // PHASE 7 - REPORT CARD / PDF PRINT
     // ==============================
 
     function printReportCard() {
+
         if (!currentResultData) return;
+
+        /*
+         * Add a temporary class to the body.
+         * The print CSS can use this class to isolate
+         * the report from the rest of the application.
+         */
+
+        document.body.classList.add("printing-report");
+
         window.print();
     }
+
+
+    /*
+     * Remove temporary print class after printing.
+     */
+
+    window.addEventListener("afterprint", function () {
+
+        document.body.classList.remove(
+            "printing-report"
+        );
+
+    });
+
 
     // ==============================
     // PHASE 6 - STUDENT DASHBOARD
     // ==============================
 
     function renderStudentDashboard(student, preferredResult) {
-        const dashboard = document.getElementById("studentDashboard");
+
+        const dashboard =
+            document.getElementById("studentDashboard");
+
         if (!dashboard) return;
 
-        const currentStudent = student || studentInfo;
-        const hasStudent = currentStudent && currentStudent.name && currentStudent.roll && currentStudent.className;
+        const currentStudent =
+            student || studentInfo;
+
+        const hasStudent =
+            currentStudent &&
+            currentStudent.name &&
+            currentStudent.roll &&
+            currentStudent.className;
+
 
         if (!hasStudent) {
+
             dashboard.innerHTML = `
                 <div class="dashboard-empty">
+
                     <span>👤</span>
-                    <strong>Enter your student details to open your dashboard</strong>
-                    <p>Your dashboard will only show results matching your Name + Roll Number + Class.</p>
-                </div>`;
+
+                    <strong>
+                        Enter your student details to open your dashboard
+                    </strong>
+
+                    <p>
+                        Your dashboard will only show results
+                        matching your Name + Roll Number + Class.
+                    </p>
+
+                </div>
+            `;
+
             return;
         }
 
-        const history = getStudentHistory(currentStudent.name, currentStudent.roll, currentStudent.className)
-            .slice()
-            .sort(function (a, b) { return new Date(b.savedAt || 0) - new Date(a.savedAt || 0); });
 
-        const latest = preferredResult || currentResultData || history[0] || null;
-        const latestSubjects = latest && Array.isArray(latest.subjects) ? latest.subjects : [];
+        const history =
+            getStudentHistory(
+                currentStudent.name,
+                currentStudent.roll,
+                currentStudent.className
+            )
+            .slice()
+            .sort(function (a, b) {
+
+                return new Date(
+                    b.savedAt || 0
+                ) - new Date(
+                    a.savedAt || 0
+                );
+
+            });
+
+
+        const latest =
+            preferredResult ||
+            currentResultData ||
+            history[0] ||
+            null;
+
+
+        const latestSubjects =
+            latest &&
+            Array.isArray(latest.subjects)
+                ? latest.subjects
+                : [];
+
 
         if (!latest) {
+
             dashboard.innerHTML = `
                 <div class="dashboard-profile dashboard-no-result">
-                    <div class="dashboard-avatar">${escapeHtml((currentStudent.name || "S").charAt(0).toUpperCase())}</div>
-                    <div class="dashboard-profile-copy">
-                        <span class="dashboard-label">STUDENT PROFILE</span>
-                        <h3>${escapeHtml(currentStudent.name)}</h3>
-                        <p>Roll No. ${escapeHtml(currentStudent.roll)} · Class ${escapeHtml(currentStudent.className)}</p>
+
+                    <div class="dashboard-avatar">
+                        ${escapeHtml(
+                            (currentStudent.name || "S")
+                                .charAt(0)
+                                .toUpperCase()
+                        )}
                     </div>
+
+                    <div class="dashboard-profile-copy">
+
+                        <span class="dashboard-label">
+                            STUDENT PROFILE
+                        </span>
+
+                        <h3>
+                            ${escapeHtml(currentStudent.name)}
+                        </h3>
+
+                        <p>
+                            Roll No.
+                            ${escapeHtml(currentStudent.roll)}
+                            · Class
+                            ${escapeHtml(currentStudent.className)}
+                        </p>
+
+                    </div>
+
                 </div>
+
                 <div class="dashboard-empty dashboard-empty-inline">
+
                     <span>📚</span>
-                    <strong>No saved exam result yet</strong>
-                    <p>Complete and save your first exam to build your dashboard.</p>
-                </div>`;
+
+                    <strong>
+                        No saved exam result yet
+                    </strong>
+
+                    <p>
+                        Complete and save your first exam
+                        to build your dashboard.
+                    </p>
+
+                </div>
+            `;
+
             return;
         }
+
 
         let strongest = null;
         let weakest = null;
+
+
         latestSubjects.forEach(function (subject) {
-            const marks = Number(subject.marks) || 0;
-            if (!strongest || marks > strongest.marks) strongest = { name: subject.name, marks: marks };
-            if (!weakest || marks < weakest.marks) weakest = { name: subject.name, marks: marks };
+
+            const marks =
+                Number(subject.marks) || 0;
+
+
+            if (
+                !strongest ||
+                marks > strongest.marks
+            ) {
+
+                strongest = {
+                    name: subject.name,
+                    marks: marks
+                };
+
+            }
+
+
+            if (
+                !weakest ||
+                marks < weakest.marks
+            ) {
+
+                weakest = {
+                    name: subject.name,
+                    marks: marks
+                };
+
+            }
+
         });
 
-        const previous = history.find(function (item) {
-            return !(Number(item.average) === Number(latest.average) &&
-                JSON.stringify(item.subjects || []) === JSON.stringify(latest.subjects || []));
-        }) || null;
-        const change = previous ? Number(latest.average) - Number(previous.average) : null;
-        const changeSign = change !== null && change > 0 ? "+" : "";
-        const changeClass = change === null ? "dashboard-neutral" : (change > 0 ? "dashboard-positive" : (change < 0 ? "dashboard-negative" : "dashboard-neutral"));
-        const changeText = change === null ? "First result" : `${changeSign}${change.toFixed(2)}%`;
 
-        const historyHtml = history.length ? history.slice(0, 5).map(function (item, index) {
-            const dateText = item.savedAt ? new Date(item.savedAt).toLocaleDateString() : "Saved";
-            return `<div class="dashboard-history-row">
-                <div class="dashboard-history-index">${index + 1}</div>
-                <div class="dashboard-history-main">
-                    <strong>${escapeHtml(item.exam || "Exam Result")}</strong>
-                    <span>${escapeHtml(dateText)} · Grade ${escapeHtml(item.grade || "-")}</span>
-                </div>
-                <div class="dashboard-history-score">
-                    <strong>${Number(item.average || 0).toFixed(2)}%</strong>
-                    <button type="button" class="dashboard-view-result" data-dashboard-id="${escapeHtml(item.id)}">View</button>
-                </div>
-            </div>`;
-        }).join("") : `<div class="dashboard-empty-inline"><span>📚</span><strong>No exam history yet</strong></div>`;
+        const previous =
+            history.find(function (item) {
+
+                return !(
+                    Number(item.average) ===
+                    Number(latest.average) &&
+
+                    JSON.stringify(
+                        item.subjects || []
+                    ) ===
+                    JSON.stringify(
+                        latest.subjects || []
+                    )
+                );
+
+            }) || null;
+
+
+        const change =
+            previous
+                ? Number(latest.average) -
+                  Number(previous.average)
+                : null;
+
+
+        const changeSign =
+            change !== null &&
+            change > 0
+                ? "+"
+                : "";
+
+
+        const changeClass =
+            change === null
+                ? "dashboard-neutral"
+                : (
+                    change > 0
+                        ? "dashboard-positive"
+                        : (
+                            change < 0
+                                ? "dashboard-negative"
+                                : "dashboard-neutral"
+                        )
+                );
+
+
+        const changeText =
+            change === null
+                ? "First result"
+                : `${changeSign}${change.toFixed(2)}%`;
+
+
+        const historyHtml =
+            history.length
+                ? history
+                    .slice(0, 5)
+                    .map(function (item, index) {
+
+                        const dateText =
+                            item.savedAt
+                                ? new Date(
+                                    item.savedAt
+                                ).toLocaleDateString()
+                                : "Saved";
+
+
+                        return `
+                            <div class="dashboard-history-row">
+
+                                <div class="dashboard-history-index">
+                                    ${index + 1}
+                                </div>
+
+                                <div class="dashboard-history-main">
+
+                                    <strong>
+                                        ${escapeHtml(
+                                            item.exam ||
+                                            "Exam Result"
+                                        )}
+                                    </strong>
+
+                                    <span>
+                                        ${escapeHtml(dateText)}
+                                        · Grade
+                                        ${escapeHtml(
+                                            item.grade || "-"
+                                        )}
+                                    </span>
+
+                                </div>
+
+                                <div class="dashboard-history-score">
+
+                                    <strong>
+                                        ${Number(
+                                            item.average || 0
+                                        ).toFixed(2)}%
+                                    </strong>
+
+                                    <button
+                                        type="button"
+                                        class="dashboard-view-result"
+                                        data-dashboard-id="${escapeHtml(item.id)}"
+                                    >
+                                        View
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        `;
+
+                    })
+                    .join("")
+                : `
+                    <div class="dashboard-empty-inline">
+
+                        <span>📚</span>
+
+                        <strong>
+                            No exam history yet
+                        </strong>
+
+                    </div>
+                `;
+
 
         dashboard.innerHTML = `
+
             <div class="dashboard-profile">
-                <div class="dashboard-avatar">${escapeHtml((currentStudent.name || "S").charAt(0).toUpperCase())}</div>
-                <div class="dashboard-profile-copy">
-                    <span class="dashboard-label">STUDENT PROFILE</span>
-                    <h3>${escapeHtml(currentStudent.name)}</h3>
-                    <p>Roll No. ${escapeHtml(currentStudent.roll)} · Class ${escapeHtml(currentStudent.className)}</p>
+
+                <div class="dashboard-avatar">
+                    ${escapeHtml(
+                        (currentStudent.name || "S")
+                            .charAt(0)
+                            .toUpperCase()
+                    )}
                 </div>
-                <div class="dashboard-exam-pill">${escapeHtml(latest.exam || "Latest Exam")}</div>
+
+                <div class="dashboard-profile-copy">
+
+                    <span class="dashboard-label">
+                        STUDENT PROFILE
+                    </span>
+
+                    <h3>
+                        ${escapeHtml(currentStudent.name)}
+                    </h3>
+
+                    <p>
+                        Roll No.
+                        ${escapeHtml(currentStudent.roll)}
+                        · Class
+                        ${escapeHtml(currentStudent.className)}
+                    </p>
+
+                </div>
+
+                <div class="dashboard-exam-pill">
+                    ${escapeHtml(
+                        latest.exam ||
+                        "Latest Exam"
+                    )}
+                </div>
+
             </div>
+
 
             <div class="dashboard-grid">
+
                 <div class="dashboard-card dashboard-latest-card">
-                    <div class="dashboard-card-heading"><span>📊</span><div><span class="dashboard-label">LATEST RESULT</span><h3>Latest Performance</h3></div></div>
-                    <div class="dashboard-average"><strong>${Number(latest.average || 0).toFixed(2)}%</strong><span>Grade ${escapeHtml(latest.grade || "-")} · ${escapeHtml(latest.result || "")}</span></div>
-                    <div class="dashboard-progress-track"><span style="width:${Math.max(0, Math.min(100, Number(latest.average) || 0))}%"></span></div>
-                    <div class="dashboard-mini-stats"><div><strong>${escapeHtml(latest.total ?? "-")}</strong><span>Total marks</span></div><div><strong class="${changeClass}">${changeText}</strong><span>Vs previous</span></div></div>
+
+                    <div class="dashboard-card-heading">
+
+                        <span>📊</span>
+
+                        <div>
+
+                            <span class="dashboard-label">
+                                LATEST RESULT
+                            </span>
+
+                            <h3>
+                                Latest Performance
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-average">
+
+                        <strong>
+                            ${Number(
+                                latest.average || 0
+                            ).toFixed(2)}%
+                        </strong>
+
+                        <span>
+                            Grade
+                            ${escapeHtml(
+                                latest.grade || "-"
+                            )}
+                            ·
+                            ${escapeHtml(
+                                latest.result || ""
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="dashboard-progress-track">
+
+                        <span
+                            style="width:${Math.max(
+                                0,
+                                Math.min(
+                                    100,
+                                    Number(latest.average) || 0
+                                )
+                            )}%"
+                        ></span>
+
+                    </div>
+
+
+                    <div class="dashboard-mini-stats">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(
+                                    latest.total ?? "-"
+                                )}
+                            </strong>
+
+                            <span>
+                                Total marks
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong class="${changeClass}">
+                                ${changeText}
+                            </strong>
+
+                            <span>
+                                Vs previous
+                            </span>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="dashboard-card">
-                    <div class="dashboard-card-heading"><span>🏆</span><div><span class="dashboard-label">STRONGEST</span><h3>Best Subject</h3></div></div>
-                    <div class="dashboard-subject-highlight strong">${strongest ? escapeHtml(strongest.name) : "-"}<strong>${strongest ? strongest.marks + "%" : ""}</strong></div>
-                    <p class="dashboard-card-note">Your highest score in the latest exam.</p>
-                </div>
 
                 <div class="dashboard-card">
-                    <div class="dashboard-card-heading"><span>🎯</span><div><span class="dashboard-label">FOCUS AREA</span><h3>Weakest Subject</h3></div></div>
-                    <div class="dashboard-subject-highlight focus">${weakest ? escapeHtml(weakest.name) : "-"}<strong>${weakest ? weakest.marks + "%" : ""}</strong></div>
-                    <p class="dashboard-card-note">Give this subject some extra practice.</p>
+
+                    <div class="dashboard-card-heading">
+
+                        <span>🏆</span>
+
+                        <div>
+
+                            <span class="dashboard-label">
+                                STRONGEST
+                            </span>
+
+                            <h3>
+                                Best Subject
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-subject-highlight strong">
+
+                        ${strongest
+                            ? escapeHtml(strongest.name)
+                            : "-"}
+
+                        <strong>
+                            ${strongest
+                                ? strongest.marks + "%"
+                                : ""}
+                        </strong>
+
+                    </div>
+
+
+                    <p class="dashboard-card-note">
+                        Your highest score in the latest exam.
+                    </p>
+
                 </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-heading">
+
+                        <span>🎯</span>
+
+                        <div>
+
+                            <span class="dashboard-label">
+                                FOCUS AREA
+                            </span>
+
+                            <h3>
+                                Weakest Subject
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-subject-highlight focus">
+
+                        ${weakest
+                            ? escapeHtml(weakest.name)
+                            : "-"}
+
+                        <strong>
+                            ${weakest
+                                ? weakest.marks + "%"
+                                : ""}
+                        </strong>
+
+                    </div>
+
+
+                    <p class="dashboard-card-note">
+                        Give this subject some extra practice.
+                    </p>
+
+                </div>
+
             </div>
+
 
             <div class="dashboard-card dashboard-progress-card">
-                <div class="dashboard-card-heading"><span>📈</span><div><span class="dashboard-label">PROGRESS</span><h3>Exam-to-Exam Progress</h3></div></div>
-                ${previous ? `<div class="dashboard-progress-compare"><div><span>${escapeHtml(previous.exam || "Previous Exam")}</span><strong>${Number(previous.average).toFixed(2)}%</strong></div><span class="dashboard-arrow">→</span><div><span>${escapeHtml(latest.exam || "Latest Exam")}</span><strong>${Number(latest.average).toFixed(2)}%</strong></div><div class="dashboard-change ${changeClass}">${changeText}</div></div>` : `<div class="dashboard-empty-inline"><span>🌱</span><div><strong>Starting point</strong><p>Save another exam to see how your performance changes over time.</p></div></div>`}
+
+                <div class="dashboard-card-heading">
+
+                    <span>📈</span>
+
+                    <div>
+
+                        <span class="dashboard-label">
+                            PROGRESS
+                        </span>
+
+                        <h3>
+                            Exam-to-Exam Progress
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                ${
+                    previous
+
+                        ? `
+
+                            <div class="dashboard-progress-compare">
+
+                                <div>
+
+                                    <span>
+                                        ${escapeHtml(
+                                            previous.exam ||
+                                            "Previous Exam"
+                                        )}
+                                    </span>
+
+                                    <strong>
+                                        ${Number(
+                                            previous.average
+                                        ).toFixed(2)}%
+                                    </strong>
+
+                                </div>
+
+
+                                <span class="dashboard-arrow">
+                                    →
+                                </span>
+
+
+                                <div>
+
+                                    <span>
+                                        ${escapeHtml(
+                                            latest.exam ||
+                                            "Latest Exam"
+                                        )}
+                                    </span>
+
+                                    <strong>
+                                        ${Number(
+                                            latest.average
+                                        ).toFixed(2)}%
+                                    </strong>
+
+                                </div>
+
+
+                                <div
+                                    class="dashboard-change ${changeClass}"
+                                >
+                                    ${changeText}
+                                </div>
+
+                            </div>
+
+                        `
+
+                        : `
+
+                            <div class="dashboard-empty-inline">
+
+                                <span>🌱</span>
+
+                                <div>
+
+                                    <strong>
+                                        Starting point
+                                    </strong>
+
+                                    <p>
+                                        Save another exam to see
+                                        how your performance changes
+                                        over time.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        `
+                }
+
             </div>
 
+
             <div class="dashboard-card dashboard-history-card">
-                <div class="dashboard-card-heading"><span>📚</span><div><span class="dashboard-label">EXAM HISTORY</span><h3>Your Saved Exams</h3></div><span class="dashboard-history-count">${history.length}</span></div>
-                <div class="dashboard-history-list">${historyHtml}</div>
-            </div>`;
 
-        dashboard.querySelectorAll(".dashboard-view-result").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const item = getHistory().find(function (entry) { return entry.id === button.dataset.dashboardId; });
-                if (item) loadSavedResult(item);
-            });
-        });
-    }
+                <div class="dashboard-card-heading">
 
-    function renderHistory(student) {
-        const historyList = document.getElementById("historyList");
-        const clearButton = document.getElementById("clearHistoryButton");
-        if (!historyList) return;
-
-        const currentStudent = student || studentInfo;
-        const hasStudent = currentStudent && currentStudent.name && currentStudent.roll && currentStudent.className;
-        const history = hasStudent
-            ? getStudentHistory(currentStudent.name, currentStudent.roll, currentStudent.className)
-            : [];
-        if (clearButton) clearButton.hidden = history.length === 0;
-
-        if (!hasStudent) {
-            historyList.innerHTML = `
-                <div class="history-empty">
-                    <span>🔐</span>
-                    <strong>Enter student details to view history</strong>
-                    <p>Only the results matching the entered Name + Roll Number + Class will be shown.</p>
-                </div>`;
-            return;
-        }
-
-        if (!history.length) {
-            historyList.innerHTML = `
-                <div class="history-empty">
                     <span>📚</span>
-                    <strong>No saved results for this student</strong>
-                    <p>No saved exam results were found for ${escapeHtml(currentStudent.name)} · Roll No. ${escapeHtml(currentStudent.roll)} · Class ${escapeHtml(currentStudent.className)}.</p>
-                </div>`;
-            return;
-        }
 
-        historyList.innerHTML = history.map(function (item) {
-            const dateText = item.savedAt ? new Date(item.savedAt).toLocaleString() : "Saved result";
-            const meta = [
-                item.className ? `Class ${escapeHtml(item.className)}` : "",
-                item.roll ? `Roll No. ${escapeHtml(item.roll)}` : "",
-                item.exam ? escapeHtml(item.exam) : ""
-            ].filter(Boolean).join(" • ");
+                    <div>
 
-            return `
-                <article class="history-card" data-history-id="${item.id}">
-                    <div class="history-card-main">
-                        <div class="history-avatar">${escapeHtml((item.name || "S").charAt(0).toUpperCase())}</div>
-                        <div>
-                            <span class="history-date">${escapeHtml(dateText)}</span>
-                            <h3>${escapeHtml(item.name)}</h3>
-                            ${meta ? `<p>${meta}</p>` : ""}
-                        </div>
-                    </div>
-                    <div class="history-result">
-                        <strong>${Number(item.average).toFixed(2)}%</strong>
-                        <span>Grade ${escapeHtml(item.grade)} · ${escapeHtml(item.result)}</span>
-                    </div>
-                    <div class="history-actions">
-                        <button type="button" class="history-load" data-id="${item.id}">View Result</button>
-                        <button type="button" class="history-delete" data-id="${item.id}" aria-label="Delete saved result">Delete</button>
-                    </div>
-                </article>`;
-        }).join("");
+                        <span class="dashboard-label">
+                            EXAM HISTORY
+                        </span>
 
-        historyList.querySelectorAll(".history-load").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const item = getHistory().find(function (entry) { return entry.id === button.dataset.id; });
-                if (!item) return;
-                loadSavedResult(item);
+                        <h3>
+                            Your Saved Exams
+                        </h3>
+
+                    </div>
+
+                    <span class="dashboard-history-count">
+                        ${history.length}
+                    </span>
+
+                </div>
+
+
+                <div class="dashboard-history-list">
+                    ${historyHtml}
+                </div>
+
+            </div>
+
+        `;
+
+
+        dashboard
+            .querySelectorAll(
+                ".dashboard-view-result"
+            )
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const item =
+                            getHistory().find(
+                                function (entry) {
+
+                                    return (
+                                        entry.id ===
+                                        button.dataset.dashboardId
+                                    );
+
+                                }
+                            );
+
+
+                        if (item) {
+                            loadSavedResult(item);
+                        }
+
+                    }
+                );
+
             });
-        });
 
-        historyList.querySelectorAll(".history-delete").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const updated = getHistory().filter(function (entry) { return entry.id !== button.dataset.id; });
-                saveHistory(updated);
-                renderHistory();
-            });
-        });
     }
+
 
     // ==============================
-    // PHASE 5 - EXAM PROGRESS TRACKING
+    // HISTORY
+    // ==============================
+
+    function renderHistory(student) {
+
+        const historyList =
+            document.getElementById(
+                "historyList"
+            );
+
+        const clearButton =
+            document.getElementById(
+                "clearHistoryButton"
+            );
+
+
+        if (!historyList) return;
+
+
+        const currentStudent =
+            student || studentInfo;
+
+
+        const hasStudent =
+            currentStudent &&
+            currentStudent.name &&
+            currentStudent.roll &&
+            currentStudent.className;
+
+
+        const history =
+            hasStudent
+                ? getStudentHistory(
+                    currentStudent.name,
+                    currentStudent.roll,
+                    currentStudent.className
+                )
+                : [];
+
+
+        if (clearButton) {
+            clearButton.hidden =
+                history.length === 0;
+        }
+
+
+        if (!hasStudent) {
+
+            historyList.innerHTML = `
+
+                <div class="history-empty">
+
+                    <span>🔐</span>
+
+                    <strong>
+                        Enter student details to view history
+                    </strong>
+
+                    <p>
+                        Only the results matching the entered
+                        Name + Roll Number + Class will be shown.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        if (!history.length) {
+
+            historyList.innerHTML = `
+
+                <div class="history-empty">
+
+                    <span>📚</span>
+
+                    <strong>
+                        No saved results for this student
+                    </strong>
+
+                    <p>
+                        No saved exam results were found for
+                        ${escapeHtml(currentStudent.name)}
+                        · Roll No.
+                        ${escapeHtml(currentStudent.roll)}
+                        · Class
+                        ${escapeHtml(currentStudent.className)}.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        historyList.innerHTML =
+            history
+                .map(function (item) {
+
+                    const dateText =
+                        item.savedAt
+                            ? new Date(
+                                item.savedAt
+                            ).toLocaleString()
+                            : "Saved result";
+
+
+                    const meta = [
+
+                        item.className
+                            ? `Class ${escapeHtml(
+                                item.className
+                            )}`
+                            : "",
+
+                        item.roll
+                            ? `Roll No. ${escapeHtml(
+                                item.roll
+                            )}`
+                            : "",
+
+                        item.exam
+                            ? escapeHtml(
+                                item.exam
+                            )
+                            : ""
+
+                    ]
+                    .filter(Boolean)
+                    .join(" • ");
+
+
+                    return `
+
+                        <article
+                            class="history-card"
+                            data-history-id="${escapeHtml(
+                                item.id
+                            )}"
+                        >
+
+                            <div class="history-card-main">
+
+                                <div class="history-avatar">
+                                    ${escapeHtml(
+                                        (item.name || "S")
+                                            .charAt(0)
+                                            .toUpperCase()
+                                    )}
+                                </div>
+
+                                <div>
+
+                                    <span class="history-date">
+                                        ${escapeHtml(
+                                            dateText
+                                        )}
+                                    </span>
+
+                                    <h3>
+                                        ${escapeHtml(
+                                            item.name
+                                        )}
+                                    </h3>
+
+                                    ${
+                                        meta
+                                            ? `<p>${meta}</p>`
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="history-result">
+
+                                <strong>
+                                    ${Number(
+                                        item.average
+                                    ).toFixed(2)}%
+                                </strong>
+
+                                <span>
+                                    Grade
+                                    ${escapeHtml(
+                                        item.grade
+                                    )}
+                                    ·
+                                    ${escapeHtml(
+                                        item.result
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div class="history-actions">
+
+                                <button
+                                    type="button"
+                                    class="history-load"
+                                    data-id="${escapeHtml(item.id)}"
+                                >
+                                    View Result
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="history-delete"
+                                    data-id="${escapeHtml(item.id)}"
+                                    aria-label="Delete saved result"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                })
+                .join("");
+
+
+        historyList
+            .querySelectorAll(".history-load")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const item =
+                            getHistory().find(
+                                function (entry) {
+
+                                    return (
+                                        entry.id ===
+                                        button.dataset.id
+                                    );
+
+                                }
+                            );
+
+
+                        if (!item) return;
+
+                        loadSavedResult(item);
+
+                    }
+                );
+
+            });
+
+
+        historyList
+            .querySelectorAll(".history-delete")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const updated =
+                            getHistory().filter(
+                                function (entry) {
+
+                                    return (
+                                        entry.id !==
+                                        button.dataset.id
+                                    );
+
+                                }
+                            );
+
+
+                        saveHistory(updated);
+
+                        renderHistory();
+
+                    }
+                );
+
+            });
+
+    }
+
+
+    // ==============================
+    // PHASE 5 - EXAM PROGRESS
     // ==============================
 
     function renderProgressTracking(resultData) {
-        const intro = document.getElementById("progressTrackerIntro");
-        const overallChange = document.getElementById("progressOverallChange");
-        const improvedCount = document.getElementById("progressImprovedCount");
-        const bestGain = document.getElementById("progressBestGain");
-        const comparison = document.getElementById("progressComparison");
 
-        if (!overallChange || !improvedCount || !bestGain || !comparison) return;
+        const intro =
+            document.getElementById(
+                "progressTrackerIntro"
+            );
 
-        const matches = getStudentHistory(
-            resultData?.name,
-            resultData?.roll,
-            resultData?.className
-        ).slice().sort(function (a, b) {
-            return new Date(b.savedAt || 0) - new Date(a.savedAt || 0);
-        });
+        const overallChange =
+            document.getElementById(
+                "progressOverallChange"
+            );
 
-        // The latest saved result is the baseline. If the current result has
-        // already been saved, skip that exact saved copy when comparing.
-        let previous = matches[0] || null;
-        if (resultData && previous &&
-            Number(previous.average) === Number(resultData.average) &&
-            JSON.stringify(previous.subjects || []) === JSON.stringify(resultData.subjects || [])) {
-            previous = matches[1] || null;
-        }
+        const improvedCount =
+            document.getElementById(
+                "progressImprovedCount"
+            );
 
-        if (!previous) {
-            overallChange.textContent = "New";
-            improvedCount.textContent = "0";
-            bestGain.textContent = "-";
-            comparison.innerHTML = `
-                <div class="progress-empty">
-                    <span>🌱</span>
-                    <div>
-                        <strong>This is your starting point</strong>
-                        <p>Save this exam. Your next saved exam will show exactly how your overall score and subjects changed.</p>
-                    </div>
-                </div>`;
-            if (intro) intro.textContent = "Save this result to start building your personal progress history.";
+        const bestGain =
+            document.getElementById(
+                "progressBestGain"
+            );
+
+        const comparison =
+            document.getElementById(
+                "progressComparison"
+            );
+
+
+        if (
+            !overallChange ||
+            !improvedCount ||
+            !bestGain ||
+            !comparison
+        ) {
             return;
         }
 
-        const change = Number(resultData.average) - Number(previous.average);
-        const sign = change > 0 ? "+" : "";
+
+        const matches =
+            getStudentHistory(
+                resultData?.name,
+                resultData?.roll,
+                resultData?.className
+            )
+            .slice()
+            .sort(function (a, b) {
+
+                return new Date(
+                    b.savedAt || 0
+                ) - new Date(
+                    a.savedAt || 0
+                );
+
+            });
+
+
+        let previous =
+            matches[0] || null;
+
+
+        if (
+            resultData &&
+            previous &&
+            Number(previous.average) ===
+                Number(resultData.average) &&
+            JSON.stringify(
+                previous.subjects || []
+            ) ===
+            JSON.stringify(
+                resultData.subjects || []
+            )
+        ) {
+
+            previous =
+                matches[1] || null;
+
+        }
+
+
+        if (!previous) {
+
+            overallChange.textContent = "New";
+            improvedCount.textContent = "0";
+            bestGain.textContent = "-";
+
+
+            comparison.innerHTML = `
+
+                <div class="progress-empty">
+
+                    <span>🌱</span>
+
+                    <div>
+
+                        <strong>
+                            This is your starting point
+                        </strong>
+
+                        <p>
+                            Save this exam. Your next saved
+                            exam will show exactly how your
+                            overall score and subjects changed.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            if (intro) {
+
+                intro.textContent =
+                    "Save this result to start building your personal progress history.";
+
+            }
+
+            return;
+        }
+
+
+        const change =
+            Number(resultData.average) -
+            Number(previous.average);
+
+
+        const sign =
+            change > 0 ? "+" : "";
+
+
         const improved = [];
         const declined = [];
         const subjectChanges = [];
 
-        const previousSubjects = new Map((previous.subjects || []).map(function (subject) {
-            return [normalizeStudentKey(subject.name), subject];
-        }));
 
-        (resultData.subjects || []).forEach(function (subject) {
-            const oldSubject = previousSubjects.get(normalizeStudentKey(subject.name));
-            if (!oldSubject) return;
-            const delta = Number(subject.marks) - Number(oldSubject.marks);
-            subjectChanges.push({ name: subject.name, current: Number(subject.marks), previous: Number(oldSubject.marks), delta: delta });
-            if (delta > 0) improved.push({ name: subject.name, delta: delta });
-            if (delta < 0) declined.push({ name: subject.name, delta: delta });
-        });
+        const previousSubjects =
+            new Map(
+                (previous.subjects || [])
+                    .map(function (subject) {
 
-        subjectChanges.sort(function (a, b) { return b.delta - a.delta; });
-        const best = subjectChanges.length ? subjectChanges[0] : null;
+                        return [
+                            normalizeStudentKey(
+                                subject.name
+                            ),
+                            subject
+                        ];
 
-        overallChange.textContent = `${sign}${change.toFixed(2)}%`;
-        overallChange.className = change > 0 ? "progress-up" : (change < 0 ? "progress-down" : "progress-same");
-        improvedCount.textContent = `${improved.length}`;
-        bestGain.textContent = best && best.delta > 0 ? `+${best.delta.toFixed(0)}%` : "-";
+                    })
+            );
 
-        const overallLabel = change > 0 ? "Improved" : (change < 0 ? "Dropped" : "No change");
-        const overallClass = change > 0 ? "up" : (change < 0 ? "down" : "same");
 
-        comparison.innerHTML = `
-            <div class="progress-overall-row ${overallClass}">
-                <div>
-                    <span class="progress-overall-label">${overallLabel}</span>
-                    <strong>${Number(previous.average).toFixed(2)}% → ${Number(resultData.average).toFixed(2)}%</strong>
-                    <small>Compared with ${escapeHtml(previous.exam || "previous exam")}</small>
-                </div>
-                <strong class="progress-delta">${sign}${change.toFixed(2)}%</strong>
-            </div>
-            <div class="subject-progress-list">
-                ${subjectChanges.length ? subjectChanges.map(function (item) {
-                    const deltaSign = item.delta > 0 ? "+" : "";
-                    const deltaClass = item.delta > 0 ? "up" : (item.delta < 0 ? "down" : "same");
-                    return `<div class="subject-progress-row">
-                        <div><strong>${escapeHtml(item.name)}</strong><span>${item.previous}% → ${item.current}%</span></div>
-                        <strong class="subject-delta ${deltaClass}">${deltaSign}${item.delta.toFixed(0)}%</strong>
-                    </div>`;
-                }).join("") : `<div class="progress-empty"><span>ℹ️</span><div><strong>No matching subjects to compare</strong><p>Use the same subject names in your next exam to see subject-wise progress.</p></div></div>`}
-            </div>`;
+        (resultData.subjects || [])
+            .forEach(function (subject) {
 
-        if (intro) {
-            intro.textContent = change > 0
-                ? `Great progress! Your overall average increased by ${change.toFixed(2)} percentage points.`
-                : change < 0
-                    ? `Your overall average changed by ${change.toFixed(2)} points. Use the subject breakdown to focus your practice.`
-                    : "Your overall average stayed the same. Check the subject breakdown for smaller changes.";
-        }
-    }
+                const oldSubject =
+                    previousSubjects.get(
+                        normalizeStudentKey(
+                            subject.name
+                        )
+                    );
 
-    function saveCurrentResult() {
-        if (!currentResultData) return;
 
-        const history = getHistory();
-        const item = {
-            ...currentResultData,
-            id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-            savedAt: new Date().toISOString()
-        };
+                if (!oldSubject) return;
 
-        history.unshift(item);
-        saveHistory(history.slice(0, 20));
-        renderHistory();
-        renderProgressTracking(currentResultData);
-        renderStudentDashboard(studentInfo, currentResultData);
 
-        const saveButton = document.getElementById("saveResultButton");
-        if (saveButton) {
-            saveButton.textContent = "✓ Saved to History";
-            saveButton.disabled = true;
-        }
-    }
+                const delta =
+                    Number(subject.marks) -
+                    Number(oldSubject.marks);
 
-    function loadSavedResult(item) {
-        studentInfo = {
-            name: item.name || "",
-            className: item.className || "",
-            roll: item.roll || "",
-            exam: item.exam || ""
-        };
-        savedSubjectNames = Array.isArray(item.subjects) ? item.subjects.map(function (subject) { return subject.name; }) : [];
 
-        const studentInfoSection = document.getElementById("studentInfoSection");
-        if (studentInfoSection) studentInfoSection.classList.add("is-hidden");
+                subjectChanges.push({
+                    name: subject.name,
+                    current: Number(subject.marks),
+                    previous: Number(oldSubject.marks),
+                    delta: delta
+                });
 
-        renderStudentDashboard(studentInfo, item);
-        showMarks(savedSubjectNames.length);
 
-        setTimeout(function () {
-            item.subjects.forEach(function (subject, index) {
-                const input = document.getElementById(`marks${index + 1}`);
-                if (input) input.value = subject.marks;
+                if (delta > 0) {
+
+                    improved.push({
+                        name: subject.name,
+                        delta: delta
+                    });
+
+                }
+
+
+                if (delta < 0) {
+
+                    declined.push({
+                        name: subject.name,
+                        delta: delta
+                    });
+
+                }
+
             });
 
-            const calculateButton = document.querySelector("#subjectSection button:last-child");
-            if (calculateButton) calculateButton.click();
-        }, 450);
+
+        subjectChanges.sort(
+            function (a, b) {
+                return b.delta - a.delta;
+            }
+        );
+
+
+        const best =
+            subjectChanges.length
+                ? subjectChanges[0]
+                : null;
+
+
+        overallChange.textContent =
+            `${sign}${change.toFixed(2)}%`;
+
+
+        overallChange.className =
+            change > 0
+                ? "progress-up"
+                : (
+                    change < 0
+                        ? "progress-down"
+                        : "progress-same"
+                );
+
+
+        improvedCount.textContent =
+            `${improved.length}`;
+
+
+        bestGain.textContent =
+            best && best.delta > 0
+                ? `+${best.delta.toFixed(0)}%`
+                : "-";
+
+
+        const overallLabel =
+            change > 0
+                ? "Improved"
+                : (
+                    change < 0
+                        ? "Dropped"
+                        : "No change"
+                );
+
+
+        const overallClass =
+            change > 0
+                ? "up"
+                : (
+                    change < 0
+                        ? "down"
+                        : "same"
+                );
+
+
+        comparison.innerHTML = `
+
+            <div class="progress-overall-row ${overallClass}">
+
+                <div>
+
+                    <span class="progress-overall-label">
+                        ${overallLabel}
+                    </span>
+
+                    <strong>
+                        ${Number(
+                            previous.average
+                        ).toFixed(2)}%
+                        →
+                        ${Number(
+                            resultData.average
+                        ).toFixed(2)}%
+                    </strong>
+
+                    <small>
+                        Compared with
+                        ${escapeHtml(
+                            previous.exam ||
+                            "previous exam"
+                        )}
+                    </small>
+
+                </div>
+
+
+                <strong class="progress-delta">
+                    ${sign}${change.toFixed(2)}%
+                </strong>
+
+            </div>
+
+
+            <div class="subject-progress-list">
+
+                ${
+                    subjectChanges.length
+
+                        ? subjectChanges
+                            .map(function (item) {
+
+                                const deltaSign =
+                                    item.delta > 0
+                                        ? "+"
+                                        : "";
+
+
+                                const deltaClass =
+                                    item.delta > 0
+                                        ? "up"
+                                        : (
+                                            item.delta < 0
+                                                ? "down"
+                                                : "same"
+                                        );
+
+
+                                return `
+
+                                    <div class="subject-progress-row">
+
+                                        <div>
+
+                                            <strong>
+                                                ${escapeHtml(
+                                                    item.name
+                                                )}
+                                            </strong>
+
+                                            <span>
+                                                ${item.previous}%
+                                                →
+                                                ${item.current}%
+                                            </span>
+
+                                        </div>
+
+                                        <strong
+                                            class="subject-delta ${deltaClass}"
+                                        >
+                                            ${deltaSign}${item.delta.toFixed(0)}%
+                                        </strong>
+
+                                    </div>
+
+                                `;
+
+                            })
+                            .join("")
+
+                        : `
+
+                            <div class="progress-empty">
+
+                                <span>ℹ️</span>
+
+                                <div>
+
+                                    <strong>
+                                        No matching subjects to compare
+                                    </strong>
+
+                                    <p>
+                                        Use the same subject names
+                                        in your next exam to see
+                                        subject-wise progress.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        `
+                }
+
+            </div>
+
+        `;
+
+
+        if (intro) {
+
+            intro.textContent =
+                change > 0
+
+                    ? `Great progress! Your overall average increased by ${change.toFixed(2)} percentage points.`
+
+                    : change < 0
+
+                        ? `Your overall average changed by ${change.toFixed(2)} points. Use the subject breakdown to focus your practice.`
+
+                        : "Your overall average stayed the same. Check the subject breakdown for smaller changes.";
+
+        }
+
     }
 
-    const clearHistoryButton = document.getElementById("clearHistoryButton");
-    if (clearHistoryButton) {
-        clearHistoryButton.addEventListener("click", function () {
-            const currentStudent = studentInfo;
-            if (!currentStudent.name || !currentStudent.roll || !currentStudent.className) return;
-            const matches = getStudentHistory(currentStudent.name, currentStudent.roll, currentStudent.className);
-            if (!matches.length) return;
-            if (confirm(`Clear saved results for ${currentStudent.name} (Roll No. ${currentStudent.roll}, Class ${currentStudent.className})?`)) {
-                const ids = new Set(matches.map(function (item) { return item.id; }));
-                saveHistory(getHistory().filter(function (item) { return !ids.has(item.id); }));
-                renderHistory();
-                renderStudentHistoryPreview(currentStudent.name, currentStudent.roll, currentStudent.className);
-            }
-        });
+
+    // ==============================
+    // SAVE RESULT
+    // ==============================
+
+    function saveCurrentResult() {
+
+        if (!currentResultData) return;
+
+
+        const history =
+            getHistory();
+
+
+        const item = {
+
+            ...currentResultData,
+
+            id:
+                `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(2, 8)}`,
+
+            savedAt:
+                new Date().toISOString()
+
+        };
+
+
+        history.unshift(item);
+
+        saveHistory(
+            history.slice(0, 20)
+        );
+
+
+        renderHistory();
+
+        renderProgressTracking(
+            currentResultData
+        );
+
+        renderStudentDashboard(
+            studentInfo,
+            currentResultData
+        );
+
+
+        const saveButton =
+            document.getElementById(
+                "saveResultButton"
+            );
+
+
+        if (saveButton) {
+
+            saveButton.textContent =
+                "✓ Saved to History";
+
+            saveButton.disabled =
+                true;
+
+        }
+
     }
+
+
+    // ==============================
+    // LOAD SAVED RESULT
+    // ==============================
+
+    function loadSavedResult(item) {
+
+        studentInfo = {
+
+            name:
+                item.name || "",
+
+            className:
+                item.className || "",
+
+            roll:
+                item.roll || "",
+
+            exam:
+                item.exam || ""
+
+        };
+
+
+        savedSubjectNames =
+            Array.isArray(item.subjects)
+                ? item.subjects.map(
+                    function (subject) {
+                        return subject.name;
+                    }
+                )
+                : [];
+
+
+        const studentInfoSection =
+            document.getElementById(
+                "studentInfoSection"
+            );
+
+
+        if (studentInfoSection) {
+
+            studentInfoSection.classList.add(
+                "is-hidden"
+            );
+
+        }
+
+
+        renderStudentDashboard(
+            studentInfo,
+            item
+        );
+
+
+        showMarks(
+            savedSubjectNames.length
+        );
+
+
+        setTimeout(function () {
+
+            item.subjects.forEach(
+                function (subject, index) {
+
+                    const input =
+                        document.getElementById(
+                            `marks${index + 1}`
+                        );
+
+
+                    if (input) {
+
+                        input.value =
+                            subject.marks;
+
+                    }
+
+                }
+            );
+
+
+            const calculateButton =
+                document.querySelector(
+                    "#subjectSection button:last-child"
+                );
+
+
+            if (calculateButton) {
+
+                calculateButton.click();
+
+            }
+
+        }, 450);
+
+    }
+
+
+    // ==============================
+    // CLEAR HISTORY
+    // ==============================
+
+    const clearHistoryButton =
+        document.getElementById(
+            "clearHistoryButton"
+        );
+
+
+    if (clearHistoryButton) {
+
+        clearHistoryButton.addEventListener(
+            "click",
+            function () {
+
+                const currentStudent =
+                    studentInfo;
+
+
+                if (
+                    !currentStudent.name ||
+                    !currentStudent.roll ||
+                    !currentStudent.className
+                ) {
+                    return;
+                }
+
+
+                const matches =
+                    getStudentHistory(
+                        currentStudent.name,
+                        currentStudent.roll,
+                        currentStudent.className
+                    );
+
+
+                if (!matches.length) return;
+
+
+                if (
+                    confirm(
+                        `Clear saved results for ${currentStudent.name} (Roll No. ${currentStudent.roll}, Class ${currentStudent.className})?`
+                    )
+                ) {
+
+                    const ids =
+                        new Set(
+                            matches.map(
+                                function (item) {
+                                    return item.id;
+                                }
+                            )
+                        );
+
+
+                    saveHistory(
+                        getHistory().filter(
+                            function (item) {
+
+                                return !ids.has(
+                                    item.id
+                                );
+
+                            }
+                        )
+                    );
+
+
+                    renderHistory();
+
+
+                    renderStudentHistoryPreview(
+                        currentStudent.name,
+                        currentStudent.roll,
+                        currentStudent.className
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
 
     renderHistory();
+
     renderStudentDashboard();
 
 
@@ -444,218 +1755,605 @@ document.addEventListener("DOMContentLoaded", function () {
     // SUBJECT FORM
     // ==============================
 
-    subjectForm.addEventListener("submit", function (event) {
+    subjectForm.addEventListener(
+        "submit",
+        function (event) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        const subjectCount = parseInt(
-            document.getElementById("subjectCount").value
-        );
 
-        if (isNaN(subjectCount) || subjectCount < 1) {
-            alert("Please enter at least 1 subject.");
-            return;
+            const subjectCount =
+                parseInt(
+                    document.getElementById(
+                        "subjectCount"
+                    ).value
+                );
+
+
+            if (
+                isNaN(subjectCount) ||
+                subjectCount < 1
+            ) {
+
+                alert(
+                    "Please enter at least 1 subject."
+                );
+
+                return;
+            }
+
+
+            const studentName =
+                document.getElementById(
+                    "studentName"
+                ).value.trim();
+
+
+            const studentClass =
+                document.getElementById(
+                    "studentClass"
+                ).value.trim();
+
+
+            if (studentName === "") {
+
+                alert(
+                    "Please enter the student name."
+                );
+
+                document.getElementById(
+                    "studentName"
+                ).focus();
+
+                return;
+            }
+
+
+            if (studentClass === "") {
+
+                alert(
+                    "Please enter the class."
+                );
+
+                document.getElementById(
+                    "studentClass"
+                ).focus();
+
+                return;
+            }
+
+
+            const studentRoll =
+                document.getElementById(
+                    "rollNumber"
+                ).value.trim();
+
+
+            if (studentRoll === "") {
+
+                alert(
+                    "Please enter the roll number so we can show only this student's saved results."
+                );
+
+                document.getElementById(
+                    "rollNumber"
+                ).focus();
+
+                return;
+            }
+
+
+            studentInfo = {
+
+                name:
+                    studentName,
+
+                className:
+                    studentClass,
+
+                roll:
+                    studentRoll,
+
+                exam:
+                    document.getElementById(
+                        "examName"
+                    ).value.trim()
+
+            };
+
+
+            const studentInfoSection =
+                document.getElementById(
+                    "studentInfoSection"
+                );
+
+
+            if (studentInfoSection) {
+
+                studentInfoSection.classList.add(
+                    "is-hidden"
+                );
+
+            }
+
+
+            renderStudentDashboard(
+                studentInfo
+            );
+
+
+            showSubjectNames(
+                subjectCount
+            );
+
         }
-
-        const studentName = document.getElementById("studentName").value.trim();
-        const studentClass = document.getElementById("studentClass").value.trim();
-
-        if (studentName === "") {
-            alert("Please enter the student name.");
-            document.getElementById("studentName").focus();
-            return;
-        }
-
-        if (studentClass === "") {
-            alert("Please enter the class.");
-            document.getElementById("studentClass").focus();
-            return;
-        }
-
-        const studentRoll = document.getElementById("rollNumber").value.trim();
-        if (studentRoll === "") {
-            alert("Please enter the roll number so we can show only this student's saved results.");
-            document.getElementById("rollNumber").focus();
-            return;
-        }
-
-        studentInfo = {
-            name: studentName,
-            className: studentClass,
-            roll: document.getElementById("rollNumber").value.trim(),
-            exam: document.getElementById("examName").value.trim()
-        };
-
-        // Hide student information after moving to the next step.
-        // The data is already saved in studentInfo, so it will still be
-        // available for the Results/Analysis sections.
-        const studentInfoSection = document.getElementById("studentInfoSection");
-        if (studentInfoSection) {
-            studentInfoSection.classList.add("is-hidden");
-        }
-
-        renderStudentDashboard(studentInfo);
-        showSubjectNames(subjectCount);
-    });
+    );
 
 
     // ==============================
-    // SHOW SUBJECT NAMES - STEP 02
+    // NORMALIZE STUDENT KEY
     // ==============================
 
     function normalizeStudentKey(value) {
-        return String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
+
+        return String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+
     }
 
-    function getStudentHistory(name, roll, className) {
-        const normalizedName = normalizeStudentKey(name);
-        const normalizedRoll = normalizeStudentKey(roll);
-        const normalizedClass = normalizeStudentKey(className);
 
-        if (!normalizedName || !normalizedRoll || !normalizedClass) return [];
+    function getStudentHistory(
+        name,
+        roll,
+        className
+    ) {
 
-        return getHistory().filter(function (item) {
-            return normalizeStudentKey(item.name) === normalizedName &&
-                   normalizeStudentKey(item.roll) === normalizedRoll &&
-                   normalizeStudentKey(item.className) === normalizedClass;
-        });
+        const normalizedName =
+            normalizeStudentKey(name);
+
+
+        const normalizedRoll =
+            normalizeStudentKey(roll);
+
+
+        const normalizedClass =
+            normalizeStudentKey(className);
+
+
+        if (
+            !normalizedName ||
+            !normalizedRoll ||
+            !normalizedClass
+        ) {
+            return [];
+        }
+
+
+        return getHistory().filter(
+            function (item) {
+
+                return (
+                    normalizeStudentKey(
+                        item.name
+                    ) === normalizedName &&
+
+                    normalizeStudentKey(
+                        item.roll
+                    ) === normalizedRoll &&
+
+                    normalizeStudentKey(
+                        item.className
+                    ) === normalizedClass
+                );
+
+            }
+        );
+
     }
 
-    function renderStudentHistoryPreview(name, roll, className) {
-        const preview = document.getElementById("studentHistoryPreview");
+
+    // ==============================
+    // STUDENT HISTORY PREVIEW
+    // ==============================
+
+    function renderStudentHistoryPreview(
+        name,
+        roll,
+        className
+    ) {
+
+        const preview =
+            document.getElementById(
+                "studentHistoryPreview"
+            );
+
+
         if (!preview) return;
 
-        const matches = getStudentHistory(name, roll, className);
+
+        const matches =
+            getStudentHistory(
+                name,
+                roll,
+                className
+            );
+
 
         if (!roll) {
+
             preview.innerHTML = `
+
                 <div class="student-history-empty">
-                    <span class="student-history-icon">🔎</span>
+
+                    <span class="student-history-icon">
+                        🔎
+                    </span>
+
                     <div>
-                        <strong>Add a Roll Number to check saved history</strong>
-                        <p>Your previous results are linked using Name + Roll Number.</p>
+
+                        <strong>
+                            Add a Roll Number to check saved history
+                        </strong>
+
+                        <p>
+                            Your previous results are linked
+                            using Name + Roll Number.
+                        </p>
+
                     </div>
-                </div>`;
+
+                </div>
+
+            `;
+
             preview.hidden = false;
+
             return;
         }
+
 
         if (!matches.length) {
+
             preview.innerHTML = `
+
                 <div class="student-history-empty">
-                    <span class="student-history-icon">👋</span>
+
+                    <span class="student-history-icon">
+                        👋
+                    </span>
+
                     <div>
-                        <span class="student-history-tag">NEW STUDENT</span>
-                        <strong>No previous results found</strong>
-                        <p>No saved result was found for ${escapeHtml(name)} · Roll No. ${escapeHtml(roll)}${className ? ` · Class ${escapeHtml(className)}` : ""}. Start a new exam below.</p>
+
+                        <span class="student-history-tag">
+                            NEW STUDENT
+                        </span>
+
+                        <strong>
+                            No previous results found
+                        </strong>
+
+                        <p>
+                            No saved result was found for
+                            ${escapeHtml(name)}
+                            · Roll No.
+                            ${escapeHtml(roll)}
+                            ${className
+                                ? ` · Class ${escapeHtml(
+                                    className
+                                )}`
+                                : ""}.
+                            Start a new exam below.
+                        </p>
+
                     </div>
-                </div>`;
+
+                </div>
+
+            `;
+
             preview.hidden = false;
+
             return;
         }
 
-        const sorted = matches.slice().sort(function (a, b) {
-            return new Date(b.savedAt || 0) - new Date(a.savedAt || 0);
-        });
+
+        const sorted =
+            matches
+                .slice()
+                .sort(function (a, b) {
+
+                    return new Date(
+                        b.savedAt || 0
+                    ) - new Date(
+                        a.savedAt || 0
+                    );
+
+                });
+
 
         preview.innerHTML = `
+
             <div class="student-history-header">
+
                 <div>
-                    <span class="student-history-tag">WELCOME BACK</span>
-                    <h4>👋 ${escapeHtml(name)}</h4>
-                    <p>Roll No. ${escapeHtml(roll)}${className ? ` · Class ${escapeHtml(className)}` : ""}</p>
-                </div>
-                <strong>${sorted.length} saved result${sorted.length === 1 ? "" : "s"}</strong>
-            </div>
-            <div class="student-history-items">
-                ${sorted.map(function (item) {
-                    const dateText = item.savedAt ? new Date(item.savedAt).toLocaleDateString() : "Saved";
-                    return `
-                        <div class="student-history-item">
-                            <div>
-                                <strong>${escapeHtml(item.exam || "Exam Result")}</strong>
-                                <span>${dateText}${item.className ? ` · Class ${escapeHtml(item.className)}` : ""}</span>
-                            </div>
-                            <div class="student-history-score">
-                                <strong>${Number(item.average || 0).toFixed(2)}%</strong>
-                                <span>Grade ${escapeHtml(item.grade || "-")} · ${escapeHtml(item.result || "")}</span>
-                            </div>
-                        </div>`;
-                }).join("")}
-            </div>
-            <div class="student-history-actions">
-                <button type="button" id="viewStudentHistoryButton">📚 View Full History</button>
-                <span>Ready for a new exam? Enter the subjects below.</span>
-            </div>`;
 
-        const viewButton = document.getElementById("viewStudentHistoryButton");
-        if (viewButton) {
-            viewButton.addEventListener("click", function () {
-                const historySection = document.getElementById("history");
-                if (historySection) historySection.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-        }
+                    <span class="student-history-tag">
+                        WELCOME BACK
+                    </span>
 
-        preview.hidden = false;
-    }
-
-    function showSubjectNames(subjectCount) {
-
-        const formStep = document.querySelector(".form-step");
-
-        // Exit animation
-        card.classList.remove("card-enter");
-        card.classList.add("card-exit");
-
-        setTimeout(function () {
-
-            // Change Step 01 → Step 02
-            formStep.innerHTML = `
-                <div class="step-number">02</div>
-
-                <div class="step-content">
-
-                    <h3>Enter Subject Names</h3>
+                    <h4>
+                        👋 ${escapeHtml(name)}
+                    </h4>
 
                     <p>
-                        Enter the name of each subject you want to analyse.
+                        Roll No.
+                        ${escapeHtml(roll)}
+                        ${className
+                            ? ` · Class ${escapeHtml(
+                                className
+                            )}`
+                            : ""}
                     </p>
 
                 </div>
+
+
+                <strong>
+                    ${sorted.length}
+                    saved result${sorted.length === 1 ? "" : "s"}
+                </strong>
+
+            </div>
+
+
+            <div class="student-history-items">
+
+                ${sorted.map(
+                    function (item) {
+
+                        const dateText =
+                            item.savedAt
+                                ? new Date(
+                                    item.savedAt
+                                ).toLocaleDateString()
+                                : "Saved";
+
+
+                        return `
+
+                            <div class="student-history-item">
+
+                                <div>
+
+                                    <strong>
+                                        ${escapeHtml(
+                                            item.exam ||
+                                            "Exam Result"
+                                        )}
+                                    </strong>
+
+                                    <span>
+                                        ${escapeHtml(dateText)}
+                                        ${
+                                            item.className
+                                                ? ` · Class ${escapeHtml(
+                                                    item.className
+                                                )}`
+                                                : ""
+                                        }
+                                    </span>
+
+                                </div>
+
+
+                                <div class="student-history-score">
+
+                                    <strong>
+                                        ${Number(
+                                            item.average || 0
+                                        ).toFixed(2)}%
+                                    </strong>
+
+                                    <span>
+                                        Grade
+                                        ${escapeHtml(
+                                            item.grade || "-"
+                                        )}
+                                        ·
+                                        ${escapeHtml(
+                                            item.result || ""
+                                        )}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+                ).join("")}
+
+            </div>
+
+
+            <div class="student-history-actions">
+
+                <button
+                    type="button"
+                    id="viewStudentHistoryButton"
+                >
+                    📚 View Full History
+                </button>
+
+                <span>
+                    Ready for a new exam?
+                    Enter the subjects below.
+                </span>
+
+            </div>
+
+        `;
+
+
+        const viewButton =
+            document.getElementById(
+                "viewStudentHistoryButton"
+            );
+
+
+        if (viewButton) {
+
+            viewButton.addEventListener(
+                "click",
+                function () {
+
+                    const historySection =
+                        document.getElementById(
+                            "history"
+                        );
+
+
+                    if (historySection) {
+
+                        historySection.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        preview.hidden = false;
+
+    }
+
+
+    // ==============================
+    // SHOW SUBJECT NAMES
+    // ==============================
+
+    function showSubjectNames(
+        subjectCount
+    ) {
+
+        const formStep =
+            document.querySelector(
+                ".form-step"
+            );
+
+
+        card.classList.remove(
+            "card-enter"
+        );
+
+        card.classList.add(
+            "card-exit"
+        );
+
+
+        setTimeout(function () {
+
+            formStep.innerHTML = `
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <div class="step-content">
+
+                    <h3>
+                        Enter Subject Names
+                    </h3>
+
+                    <p>
+                        Enter the name of each subject
+                        you want to analyse.
+                    </p>
+
+                </div>
+
             `;
 
 
-            // Show this student's previous saved results before starting the new exam.
             subjectSection.innerHTML = `
-                <div id="studentHistoryPreview" class="student-history-preview" hidden></div>
+
+                <div
+                    id="studentHistoryPreview"
+                    class="student-history-preview"
+                    hidden
+                ></div>
+
             `;
-            renderStudentHistoryPreview(studentInfo.name, studentInfo.roll, studentInfo.className);
 
-            // Continue with the new exam inputs.
+
+            renderStudentHistoryPreview(
+                studentInfo.name,
+                studentInfo.roll,
+                studentInfo.className
+            );
 
 
             // ==============================
-            // SUBJECT NAME INPUTS
+            // SUBJECT INPUTS
             // ==============================
 
-            for (let i = 1; i <= subjectCount; i++) {
+            for (
+                let i = 1;
+                i <= subjectCount;
+                i++
+            ) {
 
-                const div = document.createElement("div");
-                div.className = "subject-input";
+                const div =
+                    document.createElement(
+                        "div"
+                    );
 
-                const label = document.createElement("label");
-                label.textContent = `Subject ${i}`;
 
-                const input = document.createElement("input");
+                div.className =
+                    "subject-input";
+
+
+                const label =
+                    document.createElement(
+                        "label"
+                    );
+
+
+                label.textContent =
+                    `Subject ${i}`;
+
+
+                const input =
+                    document.createElement(
+                        "input"
+                    );
+
+
                 input.type = "text";
-                input.placeholder = "Enter subject name";
-                input.className = "subject-name";
+
+                input.placeholder =
+                    "Enter subject name";
+
+                input.className =
+                    "subject-name";
+
                 input.required = true;
 
+
                 div.appendChild(label);
+
                 div.appendChild(input);
 
                 subjectSection.appendChild(div);
+
             }
 
 
@@ -663,21 +2361,41 @@ document.addEventListener("DOMContentLoaded", function () {
             // CONTINUE BUTTON
             // ==============================
 
-            const button = document.createElement("button");
+            const button =
+                document.createElement(
+                    "button"
+                );
+
 
             button.type = "button";
-            button.textContent = "Continue  →";
-            button.id = "subjectNameContinue";
 
-            subjectSection.appendChild(button);
+            button.textContent =
+                "Continue  →";
+
+            button.id =
+                "subjectNameContinue";
 
 
-            // Enter animation
-            card.classList.remove("card-exit");
-            card.classList.add("card-enter");
+            subjectSection.appendChild(
+                button
+            );
+
+
+            card.classList.remove(
+                "card-exit"
+            );
+
+            card.classList.add(
+                "card-enter"
+            );
+
 
             setTimeout(function () {
-                card.classList.remove("card-enter");
+
+                card.classList.remove(
+                    "card-enter"
+                );
+
             }, 450);
 
 
@@ -685,41 +2403,55 @@ document.addEventListener("DOMContentLoaded", function () {
             // CONTINUE TO MARKS
             // ==============================
 
-            button.addEventListener("click", function () {
+            button.addEventListener(
+                "click",
+                function () {
 
-                savedSubjectNames = [];
-
-                const inputs =
-                    document.querySelectorAll(".subject-name");
+                    savedSubjectNames = [];
 
 
-                inputs.forEach(function (input) {
+                    const inputs =
+                        document.querySelectorAll(
+                            ".subject-name"
+                        );
 
-                    savedSubjectNames.push(
-                        input.value.trim()
+
+                    inputs.forEach(
+                        function (input) {
+
+                            savedSubjectNames.push(
+                                input.value.trim()
+                            );
+
+                        }
                     );
 
-                });
+
+                    if (
+                        savedSubjectNames.some(
+                            function (name) {
+                                return name === "";
+                            }
+                        )
+                    ) {
+
+                        alert(
+                            "Please enter all subject names."
+                        );
+
+                        return;
+                    }
 
 
-                // Check subject names
-                if (
-                    savedSubjectNames.some(
-                        function (name) {
-                            return name === "";
-                        }
-                    )
-                ) {
-                    alert("Please enter all subject names.");
-                    return;
+                    showMarks(
+                        subjectCount
+                    );
+
                 }
-
-
-                showMarks(subjectCount);
-
-            });
+            );
 
         }, 350);
+
     }
 
 
@@ -727,50 +2459,81 @@ document.addEventListener("DOMContentLoaded", function () {
     // SHOW MARKS - STEP 03
     // ==============================
 
-    function showMarks(subjectCount) {
+    function showMarks(
+        subjectCount
+    ) {
 
-        const formStep = document.querySelector(".form-step");
+        const formStep =
+            document.querySelector(
+                ".form-step"
+            );
 
-        // Exit animation
-        card.classList.remove("card-enter");
-        card.classList.add("card-exit");
+
+        card.classList.remove(
+            "card-enter"
+        );
+
+        card.classList.add(
+            "card-exit"
+        );
 
 
         setTimeout(function () {
 
-            // Change Step 02 → Step 03
             formStep.innerHTML = `
-                <div class="step-number">03</div>
+
+                <div class="step-number">
+                    03
+                </div>
 
                 <div class="step-content">
 
-                    <h3>Enter Marks</h3>
+                    <h3>
+                        Enter Marks
+                    </h3>
 
                     <p>
-                        Enter the marks obtained in each subject.
+                        Enter the marks obtained
+                        in each subject.
                     </p>
 
                 </div>
+
             `;
 
 
-            // Clear subject names
-            subjectSection.innerHTML = "";
+            subjectSection.innerHTML =
+                "";
 
 
             // ==============================
             // MARKS INPUTS
             // ==============================
 
-            for (let i = 0; i < subjectCount; i++) {
+            for (
+                let i = 0;
+                i < subjectCount;
+                i++
+            ) {
 
-                const div = document.createElement("div");
+                const div =
+                    document.createElement(
+                        "div"
+                    );
 
-                div.className = "subject-input";
+
+                div.className =
+                    "subject-input";
+
 
                 div.innerHTML = `
-                    <label for="marks${i + 1}">
-                        ${savedSubjectNames[i]}
+
+                    <label
+                        for="marks${i + 1}"
+                    >
+                        ${escapeHtml(
+                            savedSubjectNames[i]
+                        )}
                     </label>
 
                     <input
@@ -781,9 +2544,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         placeholder="Enter marks (0-100)"
                         required
                     >
+
                 `;
 
-                subjectSection.appendChild(div);
+
+                subjectSection.appendChild(
+                    div
+                );
+
             }
 
 
@@ -792,12 +2560,21 @@ document.addEventListener("DOMContentLoaded", function () {
             // ==============================
 
             const backButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            backButton.type = "button";
-            backButton.textContent = "Back";
 
-            subjectSection.appendChild(backButton);
+            backButton.type =
+                "button";
+
+            backButton.textContent =
+                "Back";
+
+
+            subjectSection.appendChild(
+                backButton
+            );
 
 
             // ==============================
@@ -805,33 +2582,52 @@ document.addEventListener("DOMContentLoaded", function () {
             // ==============================
 
             const calculateButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            calculateButton.type = "button";
+
+            calculateButton.type =
+                "button";
+
             calculateButton.textContent =
                 "Calculate Result  →";
 
-            subjectSection.appendChild(calculateButton);
+
+            subjectSection.appendChild(
+                calculateButton
+            );
 
 
-            // Enter animation
-            card.classList.remove("card-exit");
-            card.classList.add("card-enter");
+            card.classList.remove(
+                "card-exit"
+            );
+
+            card.classList.add(
+                "card-enter"
+            );
+
 
             setTimeout(function () {
-                card.classList.remove("card-enter");
+
+                card.classList.remove(
+                    "card-enter"
+                );
+
             }, 450);
 
 
             // ==============================
-            // BACK CLICK
+            // BACK
             // ==============================
 
             backButton.addEventListener(
                 "click",
                 function () {
 
-                    showSubjectNames(subjectCount);
+                    showSubjectNames(
+                        subjectCount
+                    );
 
                 }
             );
@@ -864,7 +2660,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             );
 
 
-                        if (marksInput.value === "") {
+                        if (
+                            marksInput.value === ""
+                        ) {
 
                             alert(
                                 "Please enter marks for all subjects."
@@ -913,23 +2711,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     let grade;
 
+
                     if (average >= 90) {
+
                         grade = "A+";
+
                     }
+
                     else if (average >= 80) {
+
                         grade = "A";
+
                     }
+
                     else if (average >= 70) {
+
                         grade = "B+";
+
                     }
+
                     else if (average >= 60) {
+
                         grade = "B";
+
                     }
+
                     else if (average >= 50) {
+
                         grade = "D";
+
                     }
+
                     else {
+
                         grade = "F";
+
                     }
 
 
@@ -944,133 +2760,460 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                     // ==============================
-                    // SHOW RESULT
+                    // STUDENT META
+                    // ==============================
+
+                    const studentMeta = [
+
+                        studentInfo.className
+                            ? `Class ${escapeHtml(
+                                studentInfo.className
+                            )}`
+                            : "",
+
+                        studentInfo.roll
+                            ? `Roll No. ${escapeHtml(
+                                studentInfo.roll
+                            )}`
+                            : "",
+
+                        studentInfo.exam
+                            ? escapeHtml(
+                                studentInfo.exam
+                            )
+                            : ""
+
+                    ]
+                    .filter(Boolean)
+                    .join(" • ");
+
+
+                    // ==============================
+                    // RESULT CARD
                     // ==============================
 
                     const resultCard =
-                        document.getElementById(
-                            "resultCard"
-                        );
+    document.getElementById(
+        "resultCard"
+    );
 
-                    const studentMeta = [
-                        studentInfo.className ? `Class ${studentInfo.className}` : "",
-                        studentInfo.roll ? `Roll No. ${studentInfo.roll}` : "",
-                        studentInfo.exam ? studentInfo.exam : ""
-                    ].filter(Boolean).join(" • ");
+resultCard.innerHTML = `
+    <div class="result-card">
 
-                    resultCard.innerHTML = `
-                        <div class="result-card">
+        <div class="result-student-heading">
+            <div>
+                <span class="result-label">STUDENT RESULT</span>
+                <h3>${escapeHtml(studentInfo.name)}</h3>
+                ${studentMeta ? `<p>${escapeHtml(studentMeta)}</p>` : ""}
+            </div>
+        </div>
 
-                            <div class="result-student-heading">
-                                <div>
-                                    <span class="result-label">STUDENT RESULT</span>
-                                    <h3>${studentInfo.name}</h3>
-                                    ${studentMeta ? `<p>${studentMeta}</p>` : ""}
-                                </div>
-                            </div>
+        <h3>Result Summary</h3>
 
-                            <h3>Result Summary</h3>
+        <p>
+            <strong>Total Marks:</strong>
+            ${total}
+        </p>
 
-                            <p>
-                                <strong>Total Marks:</strong>
-                                ${total}
-                            </p>
+        <p>
+            <strong>Average:</strong>
+            ${average.toFixed(2)}%
+        </p>
 
-                            <p>
-                                <strong>Average:</strong>
-                                ${average.toFixed(2)}
-                            </p>
+        <p>
+            <strong>Grade:</strong>
+            ${grade}
+        </p>
 
-                            <p>
-                                <strong>Grade:</strong>
-                                ${grade}
-                            </p>
+        <p>
+            <strong>Result:</strong>
+            ${result}
+        </p>
 
-                            <p>
-                                <strong>Result:</strong>
-                                ${result}
-                            </p>
+        <div class="result-actions">
 
-                            <div class="result-actions">
-                                <button type="button" id="saveResultButton" class="save-result-button">
-                                    💾 Save Result
-                                </button>
-                                <button type="button" id="printReportButton" class="print-report-button">
-                                    📄 Print / Save PDF
-                                </button>
-                            </div>
+            <button
+                type="button"
+                id="saveResultButton"
+                class="save-result-button">
+                💾 Save Result
+            </button>
 
-                            <div class="print-report" id="printReport">
-                                <div class="print-report-header">
-                                    <div>
-                                        <span class="print-report-kicker">STUDENT MARKS ANALYSER</span>
-                                        <h1>Official Report Card</h1>
-                                    </div>
-                                    <div class="print-report-date">${new Date().toLocaleDateString()}</div>
-                                </div>
+            <button
+                type="button"
+                id="printReportButton"
+                class="print-report-button">
+                📄 Print / Save PDF
+            </button>
 
-                                <div class="print-student-box">
-                                    <div><span>Student Name</span><strong>${escapeHtml(studentInfo.name)}</strong></div>
-                                    <div><span>Roll Number</span><strong>${escapeHtml(studentInfo.roll || "-")}</strong></div>
-                                    <div><span>Class</span><strong>${escapeHtml(studentInfo.className || "-")}</strong></div>
-                                    <div><span>Exam</span><strong>${escapeHtml(studentInfo.exam || "Exam Result")}</strong></div>
-                                </div>
+        </div>
 
-                                <table class="print-marks-table">
-                                    <thead><tr><th>Subject</th><th>Marks</th><th>Performance</th></tr></thead>
-                                    <tbody>
-                                        ${savedSubjectNames.map(function (subject, index) {
-                                            const marks = parseFloat(document.getElementById(`marks${index + 1}`).value) || 0;
-                                            const performance = marks >= 90 ? "Excellent" : marks >= 75 ? "Very Good" : marks >= 60 ? "Good" : marks >= 40 ? "Needs Improvement" : "Poor";
-                                            return `<tr><td>${escapeHtml(subject)}</td><td>${marks}%</td><td>${performance}</td></tr>`;
-                                        }).join("")}
-                                    </tbody>
-                                </table>
 
-                                <div class="print-summary-grid">
-                                    <div><span>Total Marks</span><strong>${total}</strong></div>
-                                    <div><span>Average</span><strong>${average.toFixed(2)}%</strong></div>
-                                    <div><span>Grade</span><strong>${grade}</strong></div>
-                                    <div><span>Result</span><strong>${result}</strong></div>
-                                </div>
+        <!-- =================================
+             PREMIUM PRINT REPORT
+        ================================== -->
 
-                                <div class="print-report-footer">
-                                    <span>Generated from Student Marks Analyser</span>
-                                    <span>Student performance report</span>
-                                </div>
-                            </div>
+        <div class="print-report" id="printReport">
 
-                        </div>
-                    `;
+            <div class="print-report-header">
+
+                <div class="print-brand">
+
+                    <div class="print-logo">
+                        SMA
+                    </div>
+
+                    <div>
+                        <span class="print-report-kicker">
+                            STUDENT MARKS ANALYSER
+                        </span>
+
+                        <h1>
+                            Academic Performance Report
+                        </h1>
+
+                        <p>
+                            Official Student Result Statement
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="print-report-date-box">
+
+                    <span>REPORT DATE</span>
+
+                    <strong>
+                        ${new Date().toLocaleDateString("en-IN")}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT INFORMATION -->
+
+            <div class="print-section-heading">
+                <span>01</span>
+                <div>
+                    <strong>Student Information</strong>
+                    <small>Registered examination details</small>
+                </div>
+            </div>
+
+            <div class="print-student-box">
+
+                <div>
+                    <span>STUDENT NAME</span>
+                    <strong>
+                        ${escapeHtml(studentInfo.name)}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>ROLL NUMBER</span>
+                    <strong>
+                        ${escapeHtml(studentInfo.roll || "-")}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>CLASS</span>
+                    <strong>
+                        ${escapeHtml(studentInfo.className || "-")}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>EXAMINATION</span>
+                    <strong>
+                        ${escapeHtml(studentInfo.exam || "Exam Result")}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- SUBJECT PERFORMANCE -->
+
+            <div class="print-section-heading">
+                <span>02</span>
+                <div>
+                    <strong>Subject Performance</strong>
+                    <small>Detailed marks obtained by subject</small>
+                </div>
+            </div>
+
+            <table class="print-marks-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Performance</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${savedSubjectNames.map(function (subject, index) {
+
+                        const marks =
+                            parseFloat(
+                                document.getElementById(
+                                    `marks${index + 1}`
+                                ).value
+                            ) || 0;
+
+                        const performance =
+                            marks >= 90
+                                ? "Excellent"
+                                : marks >= 75
+                                    ? "Very Good"
+                                    : marks >= 60
+                                        ? "Good"
+                                        : marks >= 40
+                                            ? "Needs Improvement"
+                                            : "Poor";
+
+                        return `
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        ${escapeHtml(subject)}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <strong>${marks}%</strong>
+                                </td>
+
+                                <td>
+                                    <span class="print-performance">
+                                        ${performance}
+                                    </span>
+                                </td>
+
+                            </tr>
+                        `;
+
+                    }).join("")}
+
+                </tbody>
+
+            </table>
+
+
+            <!-- FINAL SUMMARY -->
+
+            <div class="print-section-heading">
+                <span>03</span>
+                <div>
+                    <strong>Final Result</strong>
+                    <small>Overall academic performance</small>
+                </div>
+            </div>
+
+            <div class="print-summary-grid">
+
+                <div>
+                    <span>TOTAL MARKS</span>
+                    <strong>${total}</strong>
+                    <small>Out of ${subjectCount * 100}</small>
+                </div>
+
+                <div>
+                    <span>AVERAGE</span>
+                    <strong>${average.toFixed(2)}%</strong>
+                    <small>Overall score</small>
+                </div>
+
+                <div>
+                    <span>GRADE</span>
+                    <strong>${grade}</strong>
+                    <small>Academic grade</small>
+                </div>
+
+                <div>
+                    <span>RESULT</span>
+                    <strong>${result}</strong>
+                    <small>Final status</small>
+                </div>
+
+            </div>
+
+
+            <!-- PERFORMANCE MESSAGE -->
+
+            <div class="print-performance-note">
+
+                <div class="print-note-icon">
+                    ${result === "PASS" ? "✓" : "!"}
+                </div>
+
+                <div>
+                    <strong>
+                        ${result === "PASS"
+                            ? "Result Status: Successfully Passed"
+                            : "Result Status: Improvement Required"}
+                    </strong>
+
+                    <p>
+                        ${average >= 75
+                            ? "Excellent academic performance. Continue maintaining this level of consistency."
+                            : average >= 60
+                                ? "Good academic performance. Continued practice can help achieve an even stronger result."
+                                : average >= 40
+                                    ? "The student has passed. Focused practice in weaker subjects can improve future performance."
+                                    : "Additional preparation and regular practice are recommended before the next examination."
+                        }
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="print-report-footer">
+
+                <div>
+                    <strong>
+                        Student Marks Analyser
+                    </strong>
+
+                    <span>
+                        Academic performance tracking system
+                    </span>
+                </div>
+
+                <div>
+                    <span>
+                        Generated on
+                    </span>
+
+                    <strong>
+                        ${new Date().toLocaleDateString("en-IN")}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+`;
+                    // ==============================
+                    // CURRENT RESULT DATA
+                    // ==============================
 
                     currentResultData = {
-                        name: studentInfo.name,
-                        className: studentInfo.className,
-                        roll: studentInfo.roll,
-                        exam: studentInfo.exam,
-                        total: total,
-                        average: average,
-                        grade: grade,
-                        result: result,
-                        subjects: savedSubjectNames.map(function (subject, index) {
-                            return {
-                                name: subject,
-                                marks: parseFloat(document.getElementById(`marks${index + 1}`).value)
-                            };
-                        })
+
+                        name:
+                            studentInfo.name,
+
+                        className:
+                            studentInfo.className,
+
+                        roll:
+                            studentInfo.roll,
+
+                        exam:
+                            studentInfo.exam,
+
+                        total:
+                            total,
+
+                        average:
+                            average,
+
+                        grade:
+                            grade,
+
+                        result:
+                            result,
+
+                        subjects:
+                            savedSubjectNames.map(
+                                function (
+                                    subject,
+                                    index
+                                ) {
+
+                                    return {
+
+                                        name:
+                                            subject,
+
+                                        marks:
+                                            parseFloat(
+                                                document
+                                                    .getElementById(
+                                                        `marks${index + 1}`
+                                                    )
+                                                    .value
+                                            )
+
+                                    };
+
+                                }
+                            )
+
                     };
 
-                    renderProgressTracking(currentResultData);
-                    renderStudentDashboard(studentInfo, currentResultData);
 
-                    const saveResultButton = document.getElementById("saveResultButton");
+                    renderProgressTracking(
+                        currentResultData
+                    );
+
+
+                    renderStudentDashboard(
+                        studentInfo,
+                        currentResultData
+                    );
+
+
+                    // ==============================
+                    // SAVE BUTTON
+                    // ==============================
+
+                    const saveResultButton =
+                        document.getElementById(
+                            "saveResultButton"
+                        );
+
+
                     if (saveResultButton) {
-                        saveResultButton.addEventListener("click", saveCurrentResult);
+
+                        saveResultButton.addEventListener(
+                            "click",
+                            saveCurrentResult
+                        );
+
                     }
 
-                    const printReportButton = document.getElementById("printReportButton");
+
+                    // ==============================
+                    // PRINT BUTTON
+                    // ==============================
+
+                    const printReportButton =
+                        document.getElementById(
+                            "printReportButton"
+                        );
+
+
                     if (printReportButton) {
-                        printReportButton.addEventListener("click", printReportCard);
+
+                        printReportButton.addEventListener(
+                            "click",
+                            printReportCard
+                        );
+
                     }
 
 
@@ -1079,9 +3222,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     // ==============================
 
                     let highestMarks = -1;
+
                     let lowestMarks = 101;
 
                     let highestSubject = "";
+
                     let lowestSubject = "";
 
                     let analysisTable = "";
@@ -1092,9 +3237,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     // ==============================
 
                     let excellent = 0;
+
                     let veryGood = 0;
+
                     let good = 0;
+
                     let improvement = 0;
+
                     let poor = 0;
 
 
@@ -1120,20 +3269,28 @@ document.addEventListener("DOMContentLoaded", function () {
                             savedSubjectNames[i];
 
 
-                        // Highest
-                        if (marks > highestMarks) {
+                        if (
+                            marks > highestMarks
+                        ) {
 
-                            highestMarks = marks;
-                            highestSubject = subject;
+                            highestMarks =
+                                marks;
+
+                            highestSubject =
+                                subject;
 
                         }
 
 
-                        // Lowest
-                        if (marks < lowestMarks) {
+                        if (
+                            marks < lowestMarks
+                        ) {
 
-                            lowestMarks = marks;
-                            lowestSubject = subject;
+                            lowestMarks =
+                                marks;
+
+                            lowestSubject =
+                                subject;
 
                         }
 
@@ -1147,45 +3304,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         if (marks >= 90) {
 
-                            performance = "Excellent";
+                            performance =
+                                "Excellent";
+
                             excellent++;
 
                         }
+
                         else if (marks >= 75) {
 
-                            performance = "Very Good";
+                            performance =
+                                "Very Good";
+
                             veryGood++;
 
                         }
+
                         else if (marks >= 60) {
 
-                            performance = "Good";
+                            performance =
+                                "Good";
+
                             good++;
 
                         }
+
                         else if (marks >= 40) {
 
-                            performance = "Needs Improvement";
+                            performance =
+                                "Needs Improvement";
+
                             improvement++;
 
                         }
+
                         else {
 
-                            performance = "Poor";
+                            performance =
+                                "Poor";
+
                             poor++;
 
                         }
 
 
                         // ==============================
-                        // TABLE ROW
+                        // ANALYSIS TABLE
                         // ==============================
 
                         analysisTable += `
+
                             <tr>
 
                                 <td>
-                                    ${subject}
+                                    ${escapeHtml(
+                                        subject
+                                    )}
                                 </td>
 
                                 <td>
@@ -1193,10 +3367,23 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </td>
 
                                 <td>
+
                                     <div class="score-cell">
-                                        <span class="score-track"><span style="width: ${marks}%"></span></span>
-                                        <strong>${marks}%</strong>
+
+                                        <span class="score-track">
+
+                                            <span
+                                                style="width: ${marks}%"
+                                            ></span>
+
+                                        </span>
+
+                                        <strong>
+                                            ${marks}%
+                                        </strong>
+
                                     </div>
+
                                 </td>
 
                                 <td>
@@ -1204,6 +3391,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </td>
 
                             </tr>
+
                         `;
 
                     }
@@ -1218,30 +3406,59 @@ document.addEventListener("DOMContentLoaded", function () {
                             "analysisTableBody"
                         );
 
-                    analysisTableBody.innerHTML =
-                        analysisTable;
+
+                    if (analysisTableBody) {
+
+                        analysisTableBody.innerHTML =
+                            analysisTable;
+
+                    }
 
 
                     // ==============================
                     // HIGHEST / LOWEST / AVERAGE
                     // ==============================
 
-                    document.getElementById(
-                        "highestScore"
-                    ).textContent =
-                        `${highestSubject} - ${highestMarks}`;
+                    const highestScore =
+                        document.getElementById(
+                            "highestScore"
+                        );
 
 
-                    document.getElementById(
-                        "lowestScore"
-                    ).textContent =
-                        `${lowestSubject} - ${lowestMarks}`;
+                    if (highestScore) {
+
+                        highestScore.textContent =
+                            `${highestSubject} - ${highestMarks}`;
+
+                    }
 
 
-                    document.getElementById(
-                        "averageScore"
-                    ).textContent =
-                        average.toFixed(2);
+                    const lowestScore =
+                        document.getElementById(
+                            "lowestScore"
+                        );
+
+
+                    if (lowestScore) {
+
+                        lowestScore.textContent =
+                            `${lowestSubject} - ${lowestMarks}`;
+
+                    }
+
+
+                    const averageScore =
+                        document.getElementById(
+                            "averageScore"
+                        );
+
+
+                    if (averageScore) {
+
+                        averageScore.textContent =
+                            average.toFixed(2);
+
+                    }
 
 
                     // ==============================
@@ -1253,31 +3470,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                     const excellentDegree =
-                        (excellent / totalSubjects) * 360;
+                        (
+                            excellent /
+                            totalSubjects
+                        ) * 360;
+
 
                     const veryGoodDegree =
-                        (veryGood / totalSubjects) * 360;
+                        (
+                            veryGood /
+                            totalSubjects
+                        ) * 360;
+
 
                     const goodDegree =
-                        (good / totalSubjects) * 360;
+                        (
+                            good /
+                            totalSubjects
+                        ) * 360;
+
 
                     const improvementDegree =
-                        (improvement / totalSubjects) * 360;
+                        (
+                            improvement /
+                            totalSubjects
+                        ) * 360;
+
 
                     const poorDegree =
-                        (poor / totalSubjects) * 360;
+                        (
+                            poor /
+                            totalSubjects
+                        ) * 360;
 
 
                     const excellentEnd =
                         excellentDegree;
 
+
                     const veryGoodEnd =
                         excellentEnd +
                         veryGoodDegree;
 
+
                     const goodEnd =
                         veryGoodEnd +
                         goodDegree;
+
 
                     const improvementEnd =
                         goodEnd +
@@ -1290,14 +3529,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
 
-                    performancePie.style.background =
-                        `conic-gradient(
-                            #4CAF50 0deg ${excellentEnd}deg,
-                            #2196F3 ${excellentEnd}deg ${veryGoodEnd}deg,
-                            #FFA726 ${veryGoodEnd}deg ${goodEnd}deg,
-                            #EF5350 ${goodEnd}deg ${improvementEnd}deg,
-                            #C62828 ${improvementEnd}deg 360deg
-                        )`;
+                    if (performancePie) {
+
+                        performancePie.style.background =
+                            `conic-gradient(
+                                #4CAF50 0deg ${excellentEnd}deg,
+                                #2196F3 ${excellentEnd}deg ${veryGoodEnd}deg,
+                                #FFA726 ${veryGoodEnd}deg ${goodEnd}deg,
+                                #EF5350 ${goodEnd}deg ${improvementEnd}deg,
+                                #C62828 ${improvementEnd}deg 360deg
+                            )`;
+
+                    }
 
 
                     // ==============================
@@ -1305,28 +3548,47 @@ document.addEventListener("DOMContentLoaded", function () {
                     // ==============================
 
                     const averageDegree =
-                        (average / 100) * 360;
+                        (
+                            average /
+                            100
+                        ) * 360;
 
 
-                    document.getElementById(
-                        "averageCircle"
-                    ).style.background = `
-                        radial-gradient(
-                            circle,
-                            #F7F4EA 58%,
-                            transparent 59%
-                        ),
-                        conic-gradient(
-                            #5E35B1 0deg ${averageDegree}deg,
-                            #DED9E2 ${averageDegree}deg 360deg
-                        )
-                    `;
+                    const averageCircle =
+                        document.getElementById(
+                            "averageCircle"
+                        );
 
 
-                    document.getElementById(
-                        "circleAverage"
-                    ).textContent =
-                        `${average.toFixed(2)}%`;
+                    if (averageCircle) {
+
+                        averageCircle.style.background = `
+                            radial-gradient(
+                                circle,
+                                #F7F4EA 58%,
+                                transparent 59%
+                            ),
+                            conic-gradient(
+                                #5E35B1 0deg ${averageDegree}deg,
+                                #DED9E2 ${averageDegree}deg 360deg
+                            )
+                        `;
+
+                    }
+
+
+                    const circleAverage =
+                        document.getElementById(
+                            "circleAverage"
+                        );
+
+
+                    if (circleAverage) {
+
+                        circleAverage.textContent =
+                            `${average.toFixed(2)}%`;
+
+                    }
 
 
                     // ==============================
@@ -1334,6 +3596,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // ==============================
 
                     let performanceTitle;
+
                     let performanceMessage;
 
 
@@ -1346,6 +3609,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "Outstanding work! Your overall performance is excellent.";
 
                     }
+
                     else if (average >= 75) {
 
                         performanceTitle =
@@ -1355,6 +3619,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "You have performed very well. Keep up the good work and continue improving.";
 
                     }
+
                     else if (average >= 60) {
 
                         performanceTitle =
@@ -1364,6 +3629,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "Your performance is good. Keep practicing to achieve even better results.";
 
                     }
+
                     else if (average >= 40) {
 
                         performanceTitle =
@@ -1373,6 +3639,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "You passed, but there is room for improvement. Focus on your weaker subjects.";
 
                     }
+
                     else {
 
                         performanceTitle =
@@ -1384,127 +3651,631 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    document.getElementById(
-                        "performanceTitle"
-                    ).textContent =
-                        performanceTitle;
+                    const performanceTitleElement =
+                        document.getElementById(
+                            "performanceTitle"
+                        );
 
 
-                    document.getElementById(
-                        "performanceMessage"
-                    ).textContent =
-                        performanceMessage;
+                    if (performanceTitleElement) {
+
+                        performanceTitleElement.textContent =
+                            performanceTitle;
+
+                    }
+
+
+                    const performanceMessageElement =
+                        document.getElementById(
+                            "performanceMessage"
+                        );
+
+
+                    if (performanceMessageElement) {
+
+                        performanceMessageElement.textContent =
+                            performanceMessage;
+
+                    }
 
 
                     // ==============================
                     // INSIGHTS
                     // ==============================
 
-                    document.getElementById(
-                        "insight1"
-                    ).textContent =
-                        `🏆 Highest score: ${highestSubject} - ${highestMarks}`;
+                    const insight1 =
+                        document.getElementById(
+                            "insight1"
+                        );
 
 
-                    document.getElementById(
-                        "insight2"
-                    ).textContent =
-                        `📉 Lowest score: ${lowestSubject} - ${lowestMarks}`;
+                    if (insight1) {
+
+                        insight1.textContent =
+                            `🏆 Highest score: ${highestSubject} - ${highestMarks}`;
+
+                    }
 
 
-                    document.getElementById(
-                        "insight3"
-                    ).textContent =
-                        `📈 Overall average: ${average.toFixed(2)}%. Keep improving.`;
+                    const insight2 =
+                        document.getElementById(
+                            "insight2"
+                        );
+
+
+                    if (insight2) {
+
+                        insight2.textContent =
+                            `📉 Lowest score: ${lowestSubject} - ${lowestMarks}`;
+
+                    }
+
+
+                    const insight3 =
+                        document.getElementById(
+                            "insight3"
+                        );
+
+
+                    if (insight3) {
+
+                        insight3.textContent =
+                            `📈 Overall average: ${average.toFixed(2)}%. Keep improving.`;
+
+                    }
 
 
                     // ==============================
-                    // PHASE 2: SMART PERFORMANCE DASHBOARD
+                    // SMART PERFORMANCE DASHBOARD
                     // ==============================
+
                     const strongSubjects = [];
+
                     const weakSubjects = [];
-                    for (let i = 0; i < subjectCount; i++) {
-                        const m = parseFloat(document.getElementById(`marks${i + 1}`).value);
-                        const n = savedSubjectNames[i];
-                        if (m >= 75) strongSubjects.push({ name: n, marks: m });
-                        if (m < 60) weakSubjects.push({ name: n, marks: m });
+
+
+                    for (
+                        let i = 0;
+                        i < subjectCount;
+                        i++
+                    ) {
+
+                        const m =
+                            parseFloat(
+                                document.getElementById(
+                                    `marks${i + 1}`
+                                ).value
+                            );
+
+
+                        const n =
+                            savedSubjectNames[i];
+
+
+                        if (m >= 75) {
+
+                            strongSubjects.push({
+                                name: n,
+                                marks: m
+                            });
+
+                        }
+
+
+                        if (m < 60) {
+
+                            weakSubjects.push({
+                                name: n,
+                                marks: m
+                            });
+
+                        }
+
                     }
-                    weakSubjects.sort((a, b) => a.marks - b.marks);
 
-                    const smartBest = document.getElementById("smartBestSubject");
-                    const smartFocus = document.getElementById("smartFocusSubject");
-                    const smartStrong = document.getElementById("smartStrongCount");
-                    const smartAvg = document.getElementById("smartAverage");
-                    if (smartBest) smartBest.textContent = `${highestSubject} (${highestMarks})`;
-                    if (smartFocus) smartFocus.textContent = `${lowestSubject} (${lowestMarks})`;
-                    if (smartStrong) smartStrong.textContent = `${strongSubjects.length} / ${subjectCount}`;
-                    if (smartAvg) smartAvg.textContent = `${average.toFixed(2)}%`;
 
-                    const subjectBars = document.getElementById("subjectBars");
+                    weakSubjects.sort(
+                        function (a, b) {
+                            return a.marks - b.marks;
+                        }
+                    );
+
+
+                    const smartBest =
+                        document.getElementById(
+                            "smartBestSubject"
+                        );
+
+
+                    const smartFocus =
+                        document.getElementById(
+                            "smartFocusSubject"
+                        );
+
+
+                    const smartStrong =
+                        document.getElementById(
+                            "smartStrongCount"
+                        );
+
+
+                    const smartAvg =
+                        document.getElementById(
+                            "smartAverage"
+                        );
+
+
+                    if (smartBest) {
+
+                        smartBest.textContent =
+                            `${highestSubject} (${highestMarks})`;
+
+                    }
+
+
+                    if (smartFocus) {
+
+                        smartFocus.textContent =
+                            `${lowestSubject} (${lowestMarks})`;
+
+                    }
+
+
+                    if (smartStrong) {
+
+                        smartStrong.textContent =
+                            `${strongSubjects.length} / ${subjectCount}`;
+
+                    }
+
+
+                    if (smartAvg) {
+
+                        smartAvg.textContent =
+                            `${average.toFixed(2)}%`;
+
+                    }
+
+
+                    // ==============================
+                    // SUBJECT PERFORMANCE BARS
+                    // ==============================
+
+                    const subjectBars =
+                        document.getElementById(
+                            "subjectBars"
+                        );
+
+
                     if (subjectBars) {
-                        subjectBars.innerHTML = savedSubjectNames.map(function (name, i) {
-                            const m = parseFloat(document.getElementById(`marks${i + 1}`).value);
-                            let cls = "bar-good";
-                            if (m >= 75) cls = "bar-strong";
-                            else if (m < 40) cls = "bar-weak";
-                            else if (m < 60) cls = "bar-focus";
-                            let label = "Good";
-                            if (m >= 90) label = "Excellent";
-                            else if (m >= 75) label = "Strong";
-                            else if (m >= 60) label = "Good";
-                            else if (m >= 40) label = "Needs Focus";
-                            else label = "Weak";
-                            const medal = i === savedSubjectNames.findIndex(function (subjectName, subjectIndex) {
-                                return parseFloat(document.getElementById(`marks${subjectIndex + 1}`).value) === highestMarks;
-                            }) ? "🏆" : "";
-                            const focus = i === savedSubjectNames.findIndex(function (subjectName, subjectIndex) {
-                                return parseFloat(document.getElementById(`marks${subjectIndex + 1}`).value) === lowestMarks;
-                            }) ? "🎯" : "";
-                            return `<div class="bar-item ${m === highestMarks ? "is-highest" : ""} ${m === lowestMarks ? "is-lowest" : ""}">
-                                <div class="bar-topline">
-                                    <div class="bar-subject"><strong>${name}</strong><span class="bar-marker">${medal}${focus}</span></div>
-                                    <div class="bar-score"><strong>${m}%</strong><span class="bar-status ${cls}">${label}</span></div>
-                                </div>
-                                <div class="bar-track"><span class="bar-fill ${cls}" style="width:${m}%"></span></div>
-                            </div>`;
-                        }).join("");
+
+                        subjectBars.innerHTML =
+                            savedSubjectNames.map(
+                                function (
+                                    name,
+                                    i
+                                ) {
+
+                                    const m =
+                                        parseFloat(
+                                            document
+                                                .getElementById(
+                                                    `marks${i + 1}`
+                                                )
+                                                .value
+                                        );
+
+
+                                    let cls =
+                                        "bar-good";
+
+
+                                    if (m >= 75) {
+
+                                        cls =
+                                            "bar-strong";
+
+                                    }
+
+                                    else if (m < 40) {
+
+                                        cls =
+                                            "bar-weak";
+
+                                    }
+
+                                    else if (m < 60) {
+
+                                        cls =
+                                            "bar-focus";
+
+                                    }
+
+
+                                    let label =
+                                        "Good";
+
+
+                                    if (m >= 90) {
+
+                                        label =
+                                            "Excellent";
+
+                                    }
+
+                                    else if (m >= 75) {
+
+                                        label =
+                                            "Strong";
+
+                                    }
+
+                                    else if (m >= 60) {
+
+                                        label =
+                                            "Good";
+
+                                    }
+
+                                    else if (m >= 40) {
+
+                                        label =
+                                            "Needs Focus";
+
+                                    }
+
+                                    else {
+
+                                        label =
+                                            "Weak";
+
+                                    }
+
+
+                                    const medal =
+                                        i ===
+                                        savedSubjectNames.findIndex(
+                                            function (
+                                                subjectName,
+                                                subjectIndex
+                                            ) {
+
+                                                return (
+                                                    parseFloat(
+                                                        document
+                                                            .getElementById(
+                                                                `marks${subjectIndex + 1}`
+                                                            )
+                                                            .value
+                                                    ) ===
+                                                    highestMarks
+                                                );
+
+                                            }
+                                        )
+                                            ? "🏆"
+                                            : "";
+
+
+                                    const focus =
+                                        i ===
+                                        savedSubjectNames.findIndex(
+                                            function (
+                                                subjectName,
+                                                subjectIndex
+                                            ) {
+
+                                                return (
+                                                    parseFloat(
+                                                        document
+                                                            .getElementById(
+                                                                `marks${subjectIndex + 1}`
+                                                            )
+                                                            .value
+                                                    ) ===
+                                                    lowestMarks
+                                                );
+
+                                            }
+                                        )
+                                            ? "🎯"
+                                            : "";
+
+
+                                    return `
+
+                                        <div
+                                            class="bar-item ${
+                                                m === highestMarks
+                                                    ? "is-highest"
+                                                    : ""
+                                            } ${
+                                                m === lowestMarks
+                                                    ? "is-lowest"
+                                                    : ""
+                                            }"
+                                        >
+
+                                            <div class="bar-topline">
+
+                                                <div class="bar-subject">
+
+                                                    <strong>
+                                                        ${escapeHtml(
+                                                            name
+                                                        )}
+                                                    </strong>
+
+                                                    <span class="bar-marker">
+                                                        ${medal}${focus}
+                                                    </span>
+
+                                                </div>
+
+
+                                                <div class="bar-score">
+
+                                                    <strong>
+                                                        ${m}%
+                                                    </strong>
+
+                                                    <span
+                                                        class="bar-status ${cls}"
+                                                    >
+                                                        ${label}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="bar-track">
+
+                                                <span
+                                                    class="bar-fill ${cls}"
+                                                    style="width:${m}%"
+                                                ></span>
+
+                                            </div>
+
+                                        </div>
+
+                                    `;
+
+                                }
+                            ).join("");
+
                     }
 
-                    const tipsList = document.getElementById("tipsList");
-                    const actionPlanIntro = document.getElementById("actionPlanIntro");
+
+                    // ==============================
+                    // ACTION PLAN / TIPS
+                    // ==============================
+
+                    const tipsList =
+                        document.getElementById(
+                            "tipsList"
+                        );
+
+
+                    const actionPlanIntro =
+                        document.getElementById(
+                            "actionPlanIntro"
+                        );
+
+
                     const tips = [];
+
+
                     if (weakSubjects.length) {
-                        const focusNames = weakSubjects.slice(0, 3).map(s => s.name).join(", ");
-                        tips.push({icon:"🎯", title:`Focus on ${focusNames}`, text:"Start with your lowest-scoring subjects and practice the topics where you make the most mistakes."});
-                        if (actionPlanIntro) actionPlanIntro.textContent = `Your biggest opportunity is ${weakSubjects[0].name}. Start there, then maintain your stronger subjects.`;
-                    } else {
-                        tips.push({icon:"🌟", title:"No major weak area", text:"Every subject is at 60 or above. Keep a consistent study routine and aim for the next grade."});
-                        if (actionPlanIntro) actionPlanIntro.textContent = "Your results are balanced. Keep your current routine and work toward the next milestone.";
+
+                        const focusNames =
+                            weakSubjects
+                                .slice(0, 3)
+                                .map(
+                                    function (s) {
+                                        return s.name;
+                                    }
+                                )
+                                .join(", ");
+
+
+                        tips.push({
+
+                            icon: "🎯",
+
+                            title:
+                                `Focus on ${focusNames}`,
+
+                            text:
+                                "Start with your lowest-scoring subjects and practice the topics where you make the most mistakes."
+
+                        });
+
+
+                        if (actionPlanIntro) {
+
+                            actionPlanIntro.textContent =
+                                `Your biggest opportunity is ${weakSubjects[0].name}. Start there, then maintain your stronger subjects.`;
+
+                        }
+
                     }
+
+                    else {
+
+                        tips.push({
+
+                            icon: "🌟",
+
+                            title:
+                                "No major weak area",
+
+                            text:
+                                "Every subject is at 60 or above. Keep a consistent study routine and aim for the next grade."
+
+                        });
+
+
+                        if (actionPlanIntro) {
+
+                            actionPlanIntro.textContent =
+                                "Your results are balanced. Keep your current routine and work toward the next milestone.";
+
+                        }
+
+                    }
+
+
                     if (strongSubjects.length) {
-                        tips.push({icon:"💪", title:`Build on ${strongSubjects[0].name}`, text:`You scored ${strongSubjects[0].marks}/100 here. Keep practicing to maintain this strength.`});
-                    } else {
-                        tips.push({icon:"📚", title:"Build your basics", text:"Start with concepts and short practice sessions before moving to harder questions."});
+
+                        tips.push({
+
+                            icon: "💪",
+
+                            title:
+                                `Build on ${strongSubjects[0].name}`,
+
+                            text:
+                                `You scored ${strongSubjects[0].marks}/100 here. Keep practicing to maintain this strength.`
+
+                        });
+
                     }
-                    if (average >= 75) tips.push({icon:"🚀", title:"Aim for the next level", text:`Your ${average.toFixed(2)}% average is strong. Challenge yourself with harder questions and timed practice.`});
-                    else if (average >= 40) tips.push({icon:"📈", title:"Improve step by step", text:`Your current average is ${average.toFixed(2)}%. Set a small target for your next test and track the change.`});
-                    else tips.push({icon:"🔄", title:"Create a regular practice routine", text:"Review the basics, practice a few questions every day, and check mistakes after each session."});
-                    if (tipsList) tipsList.innerHTML = tips.map(t => `<div class="tip-item"><span>${t.icon}</span><div><strong>${t.title}</strong><p>${t.text}</p></div></div>`).join("");
+
+                    else {
+
+                        tips.push({
+
+                            icon: "📚",
+
+                            title:
+                                "Build your basics",
+
+                            text:
+                                "Start with concepts and short practice sessions before moving to harder questions."
+
+                        });
+
+                    }
+
+
+                    if (average >= 75) {
+
+                        tips.push({
+
+                            icon: "🚀",
+
+                            title:
+                                "Aim for the next level",
+
+                            text:
+                                `Your ${average.toFixed(2)}% average is strong. Challenge yourself with harder questions and timed practice.`
+
+                        });
+
+                    }
+
+                    else if (average >= 40) {
+
+                        tips.push({
+
+                            icon: "📈",
+
+                            title:
+                                "Improve step by step",
+
+                            text:
+                                `Your current average is ${average.toFixed(2)}%. Set a small target for your next test and track the change.`
+
+                        });
+
+                    }
+
+                    else {
+
+                        tips.push({
+
+                            icon: "🔄",
+
+                            title:
+                                "Create a regular practice routine",
+
+                            text:
+                                "Review the basics, practice a few questions every day, and check mistakes after each session."
+
+                        });
+
+                    }
+
+
+                    if (tipsList) {
+
+                        tipsList.innerHTML =
+                            tips
+                                .map(
+                                    function (t) {
+
+                                        return `
+
+                                            <div class="tip-item">
+
+                                                <span>
+                                                    ${t.icon}
+                                                </span>
+
+                                                <div>
+
+                                                    <strong>
+                                                        ${escapeHtml(
+                                                            t.title
+                                                        )}
+                                                    </strong>
+
+                                                    <p>
+                                                        ${escapeHtml(
+                                                            t.text
+                                                        )}
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                        `;
+
+                                    }
+                                )
+                                .join("");
+
+                    }
+
 
                     // ==============================
                     // GO TO RESULTS
                     // ==============================
 
-                    document.getElementById(
-                        "results"
-                    ).scrollIntoView({
-                        behavior: "smooth"
-                    });
+                    const resultsSection =
+                        document.getElementById(
+                            "results"
+                        );
+
+
+                    if (resultsSection) {
+
+                        resultsSection.scrollIntoView({
+                            behavior: "smooth"
+                        });
+
+                    }
 
                 }
             );
 
+
         }, 350);
+
     }
 
 
@@ -1513,10 +4284,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==============================
 
     const sections =
-        document.querySelectorAll("section");
+        document.querySelectorAll(
+            "section"
+        );
+
 
     const navLinks =
-        document.querySelectorAll("nav a");
+        document.querySelectorAll(
+            "nav a"
+        );
 
 
     window.addEventListener(
@@ -1532,18 +4308,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     const sectionTop =
                         section.offsetTop - 100;
 
+
                     const sectionHeight =
                         section.offsetHeight;
 
 
                     if (
-                        window.scrollY >= sectionTop &&
+                        window.scrollY >=
+                            sectionTop &&
+
                         window.scrollY <
-                        sectionTop + sectionHeight
+                            sectionTop +
+                            sectionHeight
                     ) {
 
                         current =
-                            section.getAttribute("id");
+                            section.getAttribute(
+                                "id"
+                            );
 
                     }
 
@@ -1554,15 +4336,21 @@ document.addEventListener("DOMContentLoaded", function () {
             navLinks.forEach(
                 function (link) {
 
-                    link.classList.remove("active");
+                    link.classList.remove(
+                        "active"
+                    );
 
 
                     if (
-                        link.getAttribute("href") ===
+                        link.getAttribute(
+                            "href"
+                        ) ===
                         "#" + current
                     ) {
 
-                        link.classList.add("active");
+                        link.classList.add(
+                            "active"
+                        );
 
                     }
 
@@ -1573,61 +4361,123 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 });
-// ==============================
+
+
+// ======================================================
 // DARK / LIGHT MODE
-// ==============================
+// ======================================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    const themeToggle = document.getElementById("themeToggle");
+        const themeToggle =
+            document.getElementById(
+                "themeToggle"
+            );
 
-    if (!themeToggle) return;
 
-    const themeIcon = themeToggle.querySelector(".theme-icon");
-    const themeLabel = themeToggle.querySelector(".theme-label");
+        if (!themeToggle) return;
 
-    // Load saved theme
-    const savedTheme = localStorage.getItem("marksAnalyserTheme");
 
-    if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-    } else {
-        document.body.classList.remove("dark-mode");
-    }
+        const themeIcon =
+            themeToggle.querySelector(
+                ".theme-icon"
+            );
 
-    function updateThemeButton() {
 
-        const isDark =
-            document.body.classList.contains("dark-mode");
+        const themeLabel =
+            themeToggle.querySelector(
+                ".theme-label"
+            );
 
-        if (themeIcon) {
-            themeIcon.textContent = isDark ? "☀️" : "🌙";
+
+        const savedTheme =
+            localStorage.getItem(
+                "marksAnalyserTheme"
+            );
+
+
+        if (savedTheme === "dark") {
+
+            document.body.classList.add(
+                "dark-mode"
+            );
+
         }
 
-        if (themeLabel) {
-            themeLabel.textContent = isDark ? "Light" : "Dark";
+        else {
+
+            document.body.classList.remove(
+                "dark-mode"
+            );
+
         }
 
-        themeToggle.setAttribute(
-            "aria-label",
-            isDark
-                ? "Switch to light mode"
-                : "Switch to dark mode"
+
+        function updateThemeButton() {
+
+            const isDark =
+                document.body.classList.contains(
+                    "dark-mode"
+                );
+
+
+            if (themeIcon) {
+
+                themeIcon.textContent =
+                    isDark
+                        ? "☀️"
+                        : "🌙";
+
+            }
+
+
+            if (themeLabel) {
+
+                themeLabel.textContent =
+                    isDark
+                        ? "Light"
+                        : "Dark";
+
+            }
+
+
+            themeToggle.setAttribute(
+                "aria-label",
+                isDark
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
+            );
+
+        }
+
+
+        themeToggle.addEventListener(
+            "click",
+            function () {
+
+                const isDark =
+                    document.body.classList.toggle(
+                        "dark-mode"
+                    );
+
+
+                localStorage.setItem(
+                    "marksAnalyserTheme",
+                    isDark
+                        ? "dark"
+                        : "light"
+                );
+
+
+                updateThemeButton();
+
+            }
         );
-    }
 
-    themeToggle.addEventListener("click", function () {
-
-        const isDark =
-            document.body.classList.toggle("dark-mode");
-
-        localStorage.setItem(
-            "marksAnalyserTheme",
-            isDark ? "dark" : "light"
-        );
 
         updateThemeButton();
-    });
 
-    updateThemeButton();
-});
+    }
+);

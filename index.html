@@ -11,15 +11,45 @@
 <body>
 
 <header class="navbar">
-    <div class="logo">
-    <div class="logo-badge">
-        M
-        <span class="logo-spark"></span>
+    <!-- EDUTRACK BRAND LOGO -->
+<div class="logo">
+
+    <div class="edutrack-logo-mark">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+
+            <!-- Graduation Cap -->
+            <path
+                class="cap"
+                d="M8 22L32 11L56 22L32 33L8 22Z"
+            />
+
+            <path
+                class="cap-base"
+                d="M17 27V37C17 37 23 44 32 44C41 44 47 37 47 37V27L32 34L17 27Z"
+            />
+
+            <!-- Performance Bars -->
+            <rect class="bar bar-1" x="23" y="31" width="5" height="12" rx="1"/>
+            <rect class="bar bar-2" x="30" y="27" width="5" height="16" rx="1"/>
+            <rect class="bar bar-3" x="37" y="23" width="5" height="20" rx="1"/>
+
+            <!-- Tracking Orbit -->
+            <path
+                class="orbit"
+                d="M11 43C20 55 43 56 54 39"
+            />
+
+            <!-- Orbit Dot -->
+            <circle class="orbit-dot" cx="54" cy="39" r="2.5"/>
+
+        </svg>
     </div>
+
     <span class="logo-text">
-        MARKS
-        <small>Performance Analyser</small>
+        <strong>Edu<span>Track</span></strong>
+        <small>Student Performance Analytics</small>
     </span>
+
 </div>
     <nav id="mobileNav">
         <a href="#home">HOME</a>
@@ -320,11 +350,9 @@
         </p>
 
         <div id="resultCard">
-
             <div class="result-placeholder">
                 Calculate the result to see the summary.
             </div>
-
         </div>
 
         <div class="history-preview-note">
@@ -343,7 +371,6 @@
     </div>
 
 </section>
-
 
 <!-- PHASE 6: STUDENT DASHBOARD -->
 <section id="dashboard">

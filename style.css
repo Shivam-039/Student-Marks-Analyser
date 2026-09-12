@@ -19184,3 +19184,558 @@ body.dark-mode #home .right-moving-ball {
         transform: translate3d(-430px, 100px, 0) scale(1.02);
     }
 }
+/* =========================================================
+   SAVE PDF - FINAL WORKING FIX
+========================================================= */
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        background: #ffffff !important;
+    }
+
+    /*
+       Hide everything visually,
+       BUT DO NOT use display:none on parents.
+    */
+    body.printing-report * {
+        visibility: hidden !important;
+    }
+
+    /*
+       Show only report card.
+    */
+    body.printing-report .print-report,
+    body.printing-report .print-report * {
+        visibility: visible !important;
+    }
+
+    /*
+       Take report out of the normal website layout.
+       This is the important part that prevents blank pages.
+    */
+    body.printing-report .print-report {
+        display: block !important;
+
+        position: fixed !important;
+
+        left: 10mm !important;
+        top: 10mm !important;
+
+        width: 190mm !important;
+        height: auto !important;
+        min-height: 0 !important;
+
+        margin: 0 !important;
+        padding: 8mm !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+        color: #20182d !important;
+
+        border: 1.5px solid #2f2050 !important;
+        border-radius: 5px !important;
+
+        overflow: visible !important;
+
+        z-index: 999999 !important;
+    }
+
+
+    /* =====================================================
+       REPORT HEADER
+    ===================================================== */
+
+    body.printing-report .print-report-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+
+        padding-bottom: 8px !important;
+        margin: 0 !important;
+
+        border-bottom: 2px solid #2f2050 !important;
+    }
+
+
+    /* =====================================================
+       STUDENT INFORMATION
+    ===================================================== */
+
+    body.printing-report .print-student-box {
+        display: grid !important;
+
+        grid-template-columns:
+            1.6fr
+            1fr
+            1fr
+            1.25fr !important;
+
+        gap: 0 !important;
+
+        margin: 10px 0 !important;
+        padding: 0 !important;
+
+        border: 1px solid #d8d0e0 !important;
+        border-radius: 5px !important;
+
+        overflow: hidden !important;
+    }
+
+
+    /* =====================================================
+       MARKS TABLE
+    ===================================================== */
+
+    body.printing-report .print-marks-table {
+        display: table !important;
+
+        width: 100% !important;
+
+        margin: 0 !important;
+
+        border-collapse: collapse !important;
+    }
+
+    body.printing-report .print-marks-table tr {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    body.printing-report .print-marks-table th,
+    body.printing-report .print-marks-table td {
+        padding: 6px 8px !important;
+
+        border: 1px solid #d8d0e0 !important;
+
+        font-size: 8px !important;
+        line-height: 1.2 !important;
+    }
+
+    body.printing-report .print-marks-table th {
+        background: #f0ebf5 !important;
+        color: #34264a !important;
+
+        font-weight: 800 !important;
+    }
+
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
+    body.printing-report .print-summary-grid {
+        display: grid !important;
+
+        grid-template-columns: repeat(4, 1fr) !important;
+
+        gap: 6px !important;
+
+        margin-top: 10px !important;
+    }
+
+    body.printing-report .print-summary-grid > div {
+        padding: 8px 5px !important;
+
+        min-height: 42px !important;
+
+        background: #faf9fc !important;
+
+        border: 1px solid #d8d0e0 !important;
+        border-radius: 5px !important;
+
+        text-align: center !important;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    body.printing-report .print-report-footer {
+        display: flex !important;
+
+        justify-content: space-between !important;
+
+        margin-top: 10px !important;
+        padding-top: 7px !important;
+
+        border-top: 1px solid #ddd6e2 !important;
+
+        font-size: 6px !important;
+    }
+
+
+    /* =====================================================
+       PREVENT PAGE SPLIT
+    ===================================================== */
+
+    body.printing-report .print-report-header,
+    body.printing-report .print-student-box,
+    body.printing-report .print-marks-table,
+    body.printing-report .print-summary-grid,
+    body.printing-report .print-performance-note,
+    body.printing-report .print-report-footer {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+}
+/* =====================================================
+   EDUTRACK PREMIUM BRAND LOGO
+   ===================================================== */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+/* Logo Icon */
+
+.edutrack-logo-mark {
+    width: 47px;
+    height: 47px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #241052,
+            #4b20a0 55%,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 6px 18px rgba(99, 55, 190, 0.35),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* subtle glow */
+
+.edutrack-logo-mark::before {
+    content: "";
+    position: absolute;
+
+    width: 34px;
+    height: 34px;
+
+    top: -16px;
+    right: -12px;
+
+    border-radius: 50%;
+
+    background: rgba(231,138,217,0.28);
+
+    filter: blur(8px);
+}
+
+/* SVG */
+
+.edutrack-logo-mark svg {
+    width: 39px;
+    height: 39px;
+
+    position: relative;
+    z-index: 2;
+
+    overflow: visible;
+}
+
+/* Graduation cap */
+
+.edutrack-logo-mark .cap {
+    fill: #ffffff;
+}
+
+.edutrack-logo-mark .cap-base {
+    fill: #d9ccff;
+}
+
+/* Performance bars */
+
+.edutrack-logo-mark .bar {
+    fill: #a855f7;
+}
+
+.edutrack-logo-mark .bar-2 {
+    fill: #c084fc;
+}
+
+.edutrack-logo-mark .bar-3 {
+    fill: #e879f9;
+}
+
+/* Tracking orbit */
+
+.edutrack-logo-mark .orbit {
+    fill: none;
+
+    stroke: #ffffff;
+    stroke-width: 2.2;
+
+    stroke-linecap: round;
+
+    opacity: 0.95;
+}
+
+.edutrack-logo-mark .orbit-dot {
+    fill: #e879f9;
+
+    filter:
+        drop-shadow(
+            0 0 4px rgba(232,121,249,0.9)
+        );
+}
+
+
+/* =====================================================
+   EDUTRACK WORDMARK
+   ===================================================== */
+
+.logo-text {
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1.05;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+}
+
+.logo-text strong {
+    font-size: 21px;
+
+    font-weight: 850;
+
+    letter-spacing: -0.4px;
+}
+
+.logo-text strong span {
+    background:
+        linear-gradient(
+            90deg,
+            #a78bfa,
+            #c084fc,
+            #e879f9
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text small {
+    margin-top: 4px;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    color: #bdb5d6;
+}
+
+
+/* =====================================================
+   LOGO HOVER
+   ===================================================== */
+
+.logo {
+    transition: transform 0.25s ease;
+}
+
+.logo:hover {
+    transform: translateY(-1px);
+}
+
+.logo:hover .edutrack-logo-mark {
+    box-shadow:
+        0 8px 24px rgba(124,58,237,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+
+/* =====================================================
+   MOBILE LOGO
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+    .edutrack-logo-mark {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 11px;
+    }
+
+    .edutrack-logo-mark svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .logo {
+        gap: 8px;
+    }
+
+    .logo-text strong {
+        font-size: 17px;
+    }
+
+    .logo-text small {
+        display: none;
+    }
+}
+
+
+/* VERY SMALL SCREENS */
+
+@media (max-width: 380px) {
+
+    .edutrack-logo-mark {
+        width: 35px;
+        height: 35px;
+    }
+
+    .edutrack-logo-mark svg {
+        width: 29px;
+        height: 29px;
+    }
+
+    .logo-text strong {
+        font-size: 16px;
+    }
+}
+/* =====================================================
+   EDUTRACK — LIGHT / DARK NAVBAR BRAND
+   ===================================================== */
+
+/* ---------- LIGHT MODE ---------- */
+
+.logo-text {
+    color: #241052 !important;
+}
+
+.logo-text strong {
+    color: #241052 !important;
+}
+
+.logo-text strong span {
+    background: linear-gradient(
+        90deg,
+        #5b21b6,
+        #7c3aed,
+        #c026d3
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text small {
+    color: #756b8d !important;
+}
+
+
+/* ---------- LOGO ICON ---------- */
+
+.edutrack-logo-mark {
+    background: linear-gradient(
+        145deg,
+        #241052,
+        #5b21b6 55%,
+        #7c3aed
+    ) !important;
+
+    box-shadow:
+        0 6px 18px rgba(91, 33, 182, 0.28),
+        inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+
+
+/* ---------- DARK MODE ---------- */
+
+body.dark-mode .logo-text {
+    color: #ffffff !important;
+}
+
+body.dark-mode .logo-text strong {
+    color: #ffffff !important;
+}
+
+body.dark-mode .logo-text strong span {
+    background: linear-gradient(
+        90deg,
+        #a78bfa,
+        #c084fc,
+        #e879f9
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.dark-mode .logo-text small {
+    color: #bdb5d6 !important;
+}
+
+
+/* ---------- DARK MODE ICON ---------- */
+
+body.dark-mode .edutrack-logo-mark {
+    background: linear-gradient(
+        145deg,
+        #241052,
+        #4b20a0 55%,
+        #7c3aed
+    ) !important;
+
+    box-shadow:
+        0 6px 18px rgba(124,58,237,0.38),
+        inset 0 1px 0 rgba(255,255,255,0.15) !important;
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 600px) {
+
+    .logo-text strong {
+        font-size: 17px !important;
+    }
+
+    .logo-text small {
+        display: none !important;
+    }
+
+}
