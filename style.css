@@ -5359,6 +5359,7 @@ body {
     gap: 12px;
 
     margin-top: auto;
+    
 }
 
 .dashboard-mini-stats > div {
@@ -5428,7 +5429,7 @@ body {
 }
 
 .dashboard-subject-highlight.focus strong {
-    color: #b8752a;
+    color: white;
 }
 
 .dashboard-card-note {
@@ -6182,7 +6183,8 @@ body.dark-mode h5,
 body.dark-mode h6,
 body.dark-mode strong,
 body.dark-mode label {
-    color: #F7F4EA !important;
+    color: n !important;
+    background: none;
 }
 
 body.dark-mode p,
@@ -19738,4 +19740,14 @@ body.dark-mode .edutrack-logo-mark {
         display: none !important;
     }
 
+}
+/* Fix "First result" badge in dark mode */
+body.dark-mode .dashboard-neutral {
+    background: #2a2039 !important;
+    color: #cdb9e7 !important;
+    border: 1px solid rgba(255,255,255,.06) !important;
+    box-shadow: none !important;
+}
+.dashboard-subject-highlight.focus strong {
+    color: white;
 }
